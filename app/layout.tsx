@@ -32,13 +32,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <Link href="/drugs" className="hover:text-rose">{t.nav.drugs}</Link>
                 <Link href="/#how" className="hover:text-rose">{t.nav.how}</Link>
                 <Link href="/about" className="hover:text-rose">{t.nav.methods}</Link>
-                {user && <Link href="/saved" className="hover:text-rose">{t.nav.saved}</Link>}
+                {user && <Link href="/my" className="hover:text-rose">{t.my.title}</Link>}
               </div>
               <div className="flex items-center gap-2 justify-end col-start-3">
-                <Link href="/drugs" className="md:hidden text-xs font-semibold uppercase tracking-wider px-1">{t.nav.drugsShort}</Link>
+                <Link href={user ? "/my" : "/drugs"} className="md:hidden text-xs font-semibold uppercase tracking-wider px-1">{user ? t.my.title : t.nav.drugsShort}</Link>
                 <LanguageSwitch />
                 {user ? (
-                  <Link href={profile ? "/profile" : "/onboarding"} className="btn btn-ghost !py-1.5 !px-3 whitespace-nowrap">{profile?.display_name ?? t.nav.finishProfile}</Link>
+                  <Link href={profile ? "/profile" : "/onboarding"} className="hidden sm:inline-flex btn btn-ghost !py-1.5 !px-3 whitespace-nowrap">{profile?.display_name ?? t.nav.finishProfile}</Link>
                 ) : (
                   <Link href="/login" className="btn btn-primary !py-2 !px-4 whitespace-nowrap">{t.nav.join}</Link>
                 )}

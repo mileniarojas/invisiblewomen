@@ -5,12 +5,13 @@ import { supabaseBrowser } from "@/lib/supabase/client";
 import type { MedRow, ProfileRow } from "@/lib/supabase/server";
 import { useT } from "@/lib/i18n/client";
 
-type Med = { rxcui: string | null; name: string; dose: string | null; kind: string };
+export type Med = { rxcui: string | null; name: string; dose: string | null; kind: string };
 const KINDS = ["prescription", "otc", "supplement", "contraceptive", "hormone"];
 
 export function ProfileForm({ userId, profile, meds: initialMeds, onboarding }: { userId: string; profile: ProfileRow | null; meds: MedRow[]; onboarding: boolean }) {
   const router = useRouter();
-  const t = useT().profile;
+  const all = useT();
+  const t = all.profile;
   const [meds, setMeds] = useState<Med[]>(initialMeds.filter((m) => m.name !== "none"));
   const [noMeds, setNoMeds] = useState(initialMeds.some((m) => m.name === "none"));
   const [race, setRace] = useState<string[]>(profile?.race_ethnicity ?? []);
@@ -53,7 +54,7 @@ export function ProfileForm({ userId, profile, meds: initialMeds, onboarding }: 
     if (e2) return setMsg({ ok: false, text: e2.message });
     setMsg({ ok: true, text: t.savedMsg });
     router.refresh();
-    if (onboarding) router.push("/drugs");
+    if (onboarding) router.push("/my");
   };
 
   const p = profile;
@@ -70,9 +71,9 @@ export function ProfileForm({ userId, profile, meds: initialMeds, onboarding }: 
           </select></div>
         <div><label className="label" htmlFor="gi">{t.gender}</label><input id="gi" name="gender_identity" defaultValue={p?.gender_identity ?? ""} className="input" /></div>
         <div className="sm:col-span-2"><span className="label">{t.raceEth}</span>
-          <div className="flex flex-wrap gap-2">{t.races.map((r) => (
+          <div className="flex flex-wrap gap-2">{[...Object.keys(all.raceOptions), "hispanic"].map((r) => (
             <label key={r} className={`chip border cursor-pointer !py-1.5 ${race.includes(r) ? "bg-plum text-paper border-plum" : "border-line"}`}>
-              <input type="checkbox" className="sr-only" checked={race.includes(r)} onChange={() => setRace(race.includes(r) ? race.filter((x) => x !== r) : [...race, r])} />{r}
+              <input type="checkbox" className="sr-only" checked={race.includes(r)} onChange={() => setRace(race.includes(r) ? race.filter((x) => x !== r) : [...race, r])} />{r === "hispanic" ? all.wizard.hispQ.replace(/[¿?]/g, "") : all.raceOptions[r]}
             </label>))}</div></div>
         <div><label className="label" htmlFor="h">{t.height}</label><input id="h" name="height_cm" type="number" min={90} max={250} step="0.1" defaultValue={p?.height_cm ?? ""} className="input" /></div>
         <div><label className="label" htmlFor="w">{t.weight}</label><input id="w" name="weight_kg" type="number" min={25} max={350} step="0.1" defaultValue={p?.weight_kg ?? ""} className="input" /></div>
@@ -132,7 +133,7 @@ export function ProfileForm({ userId, profile, meds: initialMeds, onboarding }: 
   );
 }
 
-function MedicationPicker({ onAdd }: { onAdd: (m: Med) => void }) {
+export function MedicationPicker({ onAdd }: { onAdd: (m: Med) => void }) {
   const t = useT().profile;
   const [q, setQ] = useState("");
   const [results, setResults] = useState<{ rxcui: string; name: string }[]>([]);

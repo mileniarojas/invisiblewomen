@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getDrug } from "@/lib/data";
+import { loadDrug } from "@/lib/live";
 import { drugName, featuredInfo } from "@/lib/featured";
 import { getViewer } from "@/lib/supabase/server";
 import { getT } from "@/lib/i18n/server";
@@ -14,7 +14,7 @@ import { InteractionPanel } from "@/components/InteractionPanel";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [d, { lang }] = await Promise.all([getDrug(slug), getT()]);
+  const [d, { lang }] = await Promise.all([loadDrug(slug).catch(() => null), getT()]);
   if (!d) return { title: "—" };
   const name = drugName(slug, d.name, lang);
   return { title: name[0].toUpperCase() + name.slice(1) };
@@ -33,7 +33,7 @@ function Detail({ title, children }: { title: string; children: React.ReactNode 
 
 export default async function DrugPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [drug, { t, lang }, v] = await Promise.all([getDrug(slug), getT(), getViewer()]);
+  const [drug, { t, lang }, v] = await Promise.all([loadDrug(slug).catch(() => null), getT(), getViewer()]);
   if (!drug) notFound();
   const info = featuredInfo(slug, lang);
   const name = drugName(slug, drug.name, lang);
@@ -76,7 +76,7 @@ export default async function DrugPage({ params }: { params: Promise<{ slug: str
           </div>
           <p className="eyebrow mt-8">{info?.use}</p>
           <h1 className="font-serif text-5xl sm:text-7xl capitalize text-deep mt-2">{name}</h1>
-          {info && <p className="mt-5 text-xl leading-relaxed max-w-2xl">{info.why}</p>}
+          {info ? <p className="mt-5 text-xl leading-relaxed max-w-2xl">{info.why}</p> : drug.live && <p className="mt-5 text-lg leading-relaxed max-w-2xl">{t.drug2.liveNote}</p>}
           <ul className="grid gap-4 sm:grid-cols-3 mt-10">
             {stats.map(([n, l]) => (
               <li key={l} className="rounded-xl bg-rose-soft/70 p-6 text-center">

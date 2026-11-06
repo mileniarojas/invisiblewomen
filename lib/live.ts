@@ -6,6 +6,7 @@ import { CTGOV_FIELDS, mentionsDrug, parseStudy, slim, summarize } from "./trial
 import { US_NAMES, drugNames } from "./aliases";
 import { slugify } from "./slug";
 import type { Adr, DrugDetail, Trial } from "./types";
+import { getDrug } from "./data";
 
 // ─── RxNorm: turn whatever the user picked (brand, dose form, ingredient) into ingredient names ───
 const RXNAV = "https://rxnav.nlm.nih.gov/REST";
@@ -21,7 +22,8 @@ export async function ingredientsFor(name: string, rxcui?: string | null): Promi
       const j = await (await fetch(`${RXNAV}/rxcui/${id}/related.json?tty=IN+MIN`, { next: { revalidate: 86400 * 30 } })).json();
       const groups: any[] = j.relatedGroup?.conceptGroup ?? [];
       const ins = groups.filter((g) => g.tty === "IN").flatMap((g) => g.conceptProperties ?? []).map((c: any) => String(c.name).toLowerCase());
-      if (ins.length) return [...new Set(ins)];
+      const real = ins.filter((n) => !/inert|placebo/i.test(n));
+      if (real.length) return [...new Set(real)];
       const self = await (await fetch(`${RXNAV}/rxcui/${id}/properties.json`, { next: { revalidate: 86400 * 30 } })).json();
       if (self.properties?.tty === "IN") return [String(self.properties.name).toLowerCase()];
     }
@@ -112,4 +114,14 @@ export function getLiveDrug(ingredient: string): Promise<DrugDetail> {
   const key = ingredient.toLowerCase().trim();
   if (!memo.has(key)) memo.set(key, build(key).catch((e) => { memo.delete(key); throw e; }));
   return memo.get(key)!;
+}
+
+/** Pre-built data for the 10 featured drugs, otherwise a live look-up (only for real RxNorm ingredients). */
+export async function loadDrug(ingredientOrSlug: string): Promise<DrugDetail | null> {
+  const slug = slugify(ingredientOrSlug);
+  const stat = await getDrug(slug);
+  if (stat) return stat;
+  const name = ingredientOrSlug.includes("-") && !ingredientOrSlug.includes(" ") ? ingredientOrSlug.replace(/-/g, " ") : ingredientOrSlug;
+  if (!(await isKnownIngredient(name))) return null;
+  return getLiveDrug(name);
 }

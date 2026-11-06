@@ -8,7 +8,7 @@ export async function generateMetadata() { return { title: (await getT()).t.logi
 
 export default async function Login() {
   const [v, { t }] = await Promise.all([getViewer(), getT()]);
-  if (v.user) redirect(v.profile ? "/profile" : "/onboarding");
+  if (v.user) redirect(v.complete ? "/my" : "/onboarding");
   return (
     <div className="mx-auto max-w-md px-4 py-16">
       <h1 className="font-serif text-4xl mb-2">{t.login.title}</h1>

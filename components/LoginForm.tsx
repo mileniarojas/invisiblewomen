@@ -24,7 +24,7 @@ export function LoginForm() {
     setBusy(false);
     if (error) return setMsg({ ok: false, text: error.message });
     if (mode === "signup" && !data.session) return setMsg({ ok: true, text: t.checkEmail });
-    router.push(mode === "signup" ? "/onboarding" : "/profile");
+    router.push(mode === "signup" ? "/onboarding" : "/my");
     router.refresh();
   };
 
