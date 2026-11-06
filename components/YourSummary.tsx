@@ -7,6 +7,7 @@ import type { MedRow } from "@/lib/supabase/server";
 import type { DrugDetail } from "@/lib/types";
 import { StatusDot } from "./StatusDot";
 import { Evidence } from "./Evidence";
+import Link from "next/link";
 
 export function SummarySkeleton({ text }: { text: string }) {
   return <div className="rounded-2xl border border-line bg-card p-6 sm:p-8 animate-pulse text-muted">{text}</div>;
@@ -63,6 +64,19 @@ export async function YourSummary({ meds, profile }: { meds: MedRow[]; profile: 
           <ul className="space-y-2">{s.gaps.map((g) => <li key={g} className="flex gap-3"><StatusDot s="unknown" /><span>{g}</span></li>)}</ul>
         </div>
       )}
+      {s.needs.length > 0 && (
+        <div>
+          <h3 className="eyebrow mb-3">{t.gaps.needsTitle}</h3>
+          <ul className="space-y-2">{s.needs.map((g) => <li key={g} className="flex gap-3"><span className="text-rose font-bold" aria-hidden>○</span><span>{g}</span></li>)}</ul>
+        </div>
+      )}
+      <div className="rounded-2xl bg-rose-soft p-6 sm:p-8">
+        <h3 className="font-serif text-3xl">{t.gaps.title}</h3>
+        <p className="mt-2 text-lg leading-relaxed max-w-3xl">{t.gaps.body}</p>
+        <div className="flex flex-wrap gap-3 mt-5">
+          {s.meds.map((m) => <Link key={m.slug} href={`/drugs/${m.slug}#share`} className="btn btn-primary">{t.gaps.shareAbout(m.name)}</Link>)}
+        </div>
+      </div>
       <p className="text-xs text-muted border-t border-line pt-4">{S.method}</p>
     </section>
   );

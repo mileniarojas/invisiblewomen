@@ -58,3 +58,15 @@ export const CATEGORY: Record<string, Category> = {
   methylphenidate: "mind", zolpidem: "mind",
   pantoprazole: "stomach", spironolactone: "skin",
 };
+
+/** Best-known U.S. brand name for each common medicine, shown as "Zolpidem (Ambien)". */
+export const BRAND: Record<string, string> = {
+  pantoprazole: "Protonix", methylphenidate: "Ritalin", simvastatin: "Zocor", spironolactone: "Aldactone", losartan: "Cozaar",
+  metoprolol: "Lopressor", lisinopril: "Zestril", amlodipine: "Norvasc", atorvastatin: "Lipitor", zolpidem: "Ambien",
+};
+
+/** Pregnancy exposure registries named on the FDA label; others fall back to the FDA's list of registries. */
+export const REGISTRY: Record<string, { name: string; url: string }> = {
+  methylphenidate: { name: "National Pregnancy Registry for ADHD Medications", url: "https://womensmentalhealth.org/adhd-medications/" },
+};
+export const FDA_REGISTRY_LIST = "https://www.fda.gov/consumers/pregnancy-exposure-registries/list-pregnancy-exposure-registries";

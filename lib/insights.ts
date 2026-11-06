@@ -5,9 +5,10 @@ import type { DrugDetail } from "./types";
 import type { Dict, Lang } from "./i18n";
 import { LABEL_NOTES } from "./labelNotes";
 import { ageOf, personalRows, type PersonalRow, type ProfileLike } from "./personal";
+import { REGION_LABEL, REGION_OF } from "./countries";
 
 export type SummaryItem = PersonalRow & { med: string; trials?: number };
-export type Summary = { top: SummaryItem[]; label: SummaryItem[]; signals: SummaryItem[]; gaps: string[] };
+export type Summary = { top: SummaryItem[]; label: SummaryItem[]; signals: SummaryItem[]; gaps: string[]; needs: string[]; meds: { name: string; slug: string }[] };
 
 export function buildSummary(profile: ProfileLike, meds: { name: string; drug: DrugDetail }[], t: Dict, lang: Lang): Summary {
   const S = t.summary;
@@ -51,5 +52,22 @@ export function buildSummary(profile: ProfileLike, meds: { name: string; drug: D
   if (noBySex) gaps.push(S.noBySexAll(noBySex, withStudies.length));
   if (profile.residence_country || profile.birth_country || (profile.family_origins ?? []).length) gaps.push(S.ancestry);
 
-  return { top, label, signals, gaps };
+  // 5. What still needs to be studied: her situation × each medicine, where the studies have nothing.
+  const G = t.gaps;
+  const needs: string[] = [];
+  const regions = [...new Set((profile.family_origins ?? []).map((c) => REGION_OF[c]).filter(Boolean))];
+  for (const m of withStudies) {
+    const d = m.drug, s = d.summary;
+    if ((s.pctFemale ?? 0) < 95 && s.reporting.sexStratified < 5) needs.push(G.women(m.name));
+    if (profile.pregnancy_status === "pregnant" && !d.focus.pregnancy.some((x) => x.results)) needs.push(G.pregnant(m.name));
+    if (profile.breastfeeding && !d.focus.breastfeeding.some((x) => x.results)) needs.push(G.breastfeeding(m.name));
+    if (profile.hormonal_contraception) needs.push(G.bc(m.name));
+    if (profile.hormone_therapy) needs.push(G.hrt(m.name));
+    if ((profile.menopause_status === "peri" || profile.menopause_status === "post") && s.reporting.menopause === 0) needs.push(G.menopause(m.name));
+    if (age >= 65 && (s.exclusionPct.older_adults_excluded ?? 0) >= 30) needs.push(G.older(m.name));
+    for (const r of regions) if ((s.studiesWithLocations ?? 0) >= 3 && !(s.regionStudies?.[r])) needs.push(G.heritage(m.name, REGION_LABEL[r]));
+  }
+
+  const medsOut = [...new Map(meds.map((m) => [m.drug.slug, { name: m.name, slug: m.drug.slug }])).values()];
+  return { top, label, signals, gaps, needs: [...new Set(needs)].slice(0, 10), meds: medsOut };
 }

@@ -58,6 +58,7 @@ export async function MedResult({ med, profile }: { med: MedRow; profile: Profil
                 </ul>
                 <div className="mt-6 flex flex-wrap items-center gap-4">
                   <Link href={`/drugs/${drug.slug}`} className="btn btn-primary">{t.my.full}</Link>
+                  <Link href={`/drugs/${drug.slug}#share`} className="btn btn-outline">{t.gaps.title}</Link>
                   {drug.live && <span className="text-xs text-muted">{t.my.live}</span>}
                 </div>
               </>

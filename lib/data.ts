@@ -53,3 +53,11 @@ export async function getTotals() {
     under50: drugs.filter((d) => (d.summary.pctFemale ?? 0) < 50).length,
   };
 }
+
+/** Every AwareDX drug with its sex-biased side-effect counts and top female-biased effects (for search). */
+export type AdrIndexEntry = { name: string; isClass: boolean; femaleCount: number; maleCount: number; female: { event: string; logRor: number }[] };
+let adrIndexCache: Record<string, AdrIndexEntry> | null = null;
+export async function getAdrIndex(): Promise<Record<string, AdrIndexEntry>> {
+  adrIndexCache ??= JSON.parse(await readFile(path.join(dir, "adrs.json"), "utf8"));
+  return adrIndexCache!;
+}

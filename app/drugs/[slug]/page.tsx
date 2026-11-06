@@ -11,6 +11,8 @@ import { GroupTabs } from "@/components/GroupTabs";
 import { SideEffects } from "@/components/SideEffects";
 import { ExperienceFeed, SaveButton, type Experience } from "@/components/Community";
 import { InteractionPanel } from "@/components/InteractionPanel";
+import { MemberReport } from "@/components/MemberReport";
+import { Suspense } from "react";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -125,7 +127,8 @@ export default async function DrugPage({ params }: { params: Promise<{ slug: str
             <h3 className="font-serif text-2xl text-deep mb-4">{t.drug.interactions}</h3>
             <InteractionPanel slug={slug} drugName={name} state={state} medNames={v.meds.map((m) => m.name)} />
           </div>
-          <div>
+          <Suspense fallback={null}><MemberReport slug={slug} med={name} /></Suspense>
+          <div id="share" className="scroll-mt-24">
             <h3 className="font-serif text-2xl text-deep mb-4">{t.drug.experiences}</h3>
             <ExperienceFeed slug={slug} items={experiences} likedIds={likedIds} state={state} viewerId={v.user?.id ?? null} />
           </div>

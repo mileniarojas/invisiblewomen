@@ -1,67 +1,82 @@
 @import "tailwindcss";
 
 @theme {
-  /* Palette: Coffee Brown #8B6A5B · Blush Pink #EFD9D5 · Cream Beige #F6EEE8 · Eucalyptus Green #BFC9B3 · Warm Ivory #E8DCCB */
-  --color-paper: #f6eee8;
-  --color-card: #fffaf6;
-  --color-ink: #3d2e27;
-  --color-muted: #7d665b;
-  --color-line: #e8dccb;
-  --color-plum: #8b6a5b;
-  --color-plum-soft: #e8dccb;
-  --color-rose: #9a5363;
-  --color-rose-soft: #efd9d5;
-  --color-amber: #8b6a5b;
-  --color-amber-soft: #e8dccb;
-  --color-sage: #5e6f50;
-  --color-sage-soft: #bfc9b3;
-  --color-men: #9aa88e;
-  --color-ghost: #d9cbbe;
-  --color-deep: #4e382f;
-  --font-serif: var(--font-display), Georgia, serif;
-  --font-sans: var(--font-body), system-ui, sans-serif;
+  /* invisiblewomen palette: paper #F3F6F2 · ink #15242B · berry #B8315E · teal #2F7A78 */
+  --color-paper: #f3f6f2;
+  --color-card: #ffffff;
+  --color-ink: #15242b;
+  --color-muted: #4e5a5c;
+  --color-line: #dce2dd;
+  --color-edge: #8e9c98;
+  --color-deep: #15242b;      /* dark pill buttons, bars */
+  --color-plum: #1f5f60;      /* hover / secondary accent (green ink) */
+  --color-plum-soft: #dcebe8; /* teal soft */
+  --color-rose: #b8315e;      /* berry: women, highlights */
+  --color-rose-text: #8e1f46; /* berry text on light backgrounds */
+  --color-rose-soft: #f5dde5;
+  --color-amber: #4e5a5c;
+  --color-amber-soft: #eef1ec;
+  --color-sage: #1f5f60;
+  --color-sage-soft: #dcebe8;
+  --color-teal: #2f7a78;
+  --color-men: #8e9c98;
+  --color-ghost: #dce2dd;
+  --font-serif: var(--font-display), "Gill Sans", "Trebuchet MS", system-ui, sans-serif;
+  --font-sans: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-paper: #251c18;
-    --color-card: #2f2520;
-    --color-ink: #f6eee8;
-    --color-muted: #c4b2a6;
-    --color-line: #463830;
-    --color-plum: #c9a594;
-    --color-plum-soft: #3e322b;
-    --color-rose: #e3aeb8;
-    --color-rose-soft: #4a3035;
-    --color-amber: #c9a594;
-    --color-amber-soft: #3e322b;
-    --color-sage: #bfc9b3;
-    --color-sage-soft: #39412f;
-    --color-men: #8d9b82;
-    --color-ghost: #54463d;
-    --color-deep: #e8dccb;
+    --color-paper: #121b1f;
+    --color-card: #1a262b;
+    --color-ink: #e9efec;
+    --color-muted: #a9b6b5;
+    --color-line: #2b3a3f;
+    --color-edge: #5c6c6e;
+    --color-deep: #e9efec;
+    --color-plum: #8fcfcb;
+    --color-plum-soft: #1e3a39;
+    --color-rose: #d4557f;
+    --color-rose-text: #f6b9cc;
+    --color-rose-soft: #44202d;
+    --color-amber: #a9b6b5;
+    --color-amber-soft: #22313a;
+    --color-sage: #8fcfcb;
+    --color-sage-soft: #1e3a39;
+    --color-teal: #6fb3ae;
+    --color-men: #5c6c6e;
+    --color-ghost: #2b3a3f;
   }
 }
 
 html { background: var(--color-paper); color: var(--color-ink); }
-body { background: var(--color-paper); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
-h1, h2, h3, .serif { font-family: var(--font-serif); letter-spacing: 0; font-weight: 400; }
+body { background: var(--color-paper); font-family: var(--font-sans); font-size: 17px; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, .serif { font-family: var(--font-serif); letter-spacing: .01em; font-weight: 400; }
 a { text-underline-offset: 3px; }
-:focus-visible { outline: 2px solid var(--color-rose); outline-offset: 2px; }
+:focus-visible { outline: 2px solid #1b5cd6; outline-offset: 2px; }
 
 @layer components {
-.card { background: var(--color-card); border: 1px solid var(--color-line); border-radius: 1rem; }
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: .5rem; padding: .7rem 1.4rem; font-weight: 600; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; transition: transform .1s, background .15s; }
+.card { background: var(--color-card); border: 1px solid var(--color-line); border-radius: 1.25rem; }
+/* Pill buttons, as on invisiblewomen */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; border-radius: 999px; border: 1.5px solid var(--color-deep); padding: .6rem 1.4rem; font-weight: 700; font-size: 1rem; transition: transform .1s, background .15s, color .15s; }
 .btn:active { transform: scale(.97); }
 .btn-primary { background: var(--color-deep); color: var(--color-paper); }
-.btn-primary:hover { background: var(--color-plum); }
-.btn-lg { padding: 1rem 2rem; font-size: .95rem; }
-.link-cta { font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: .85rem; text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; }
-.eyebrow { font-weight: 600; letter-spacing: .14em; text-transform: uppercase; font-size: .75rem; color: var(--color-rose); }
-.pill-tab { border-radius: .4rem; padding: .55rem 1.1rem; font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; background: var(--color-rose-soft); color: var(--color-ink); white-space: nowrap; }
-.pill-tab[aria-selected="true"] { background: var(--color-deep); color: var(--color-paper); }
-.btn-ghost { border: 1px solid var(--color-line); background: var(--color-card); text-transform: none; letter-spacing: 0; }
-.input { width: 100%; border: 1px solid var(--color-line); background: var(--color-card); border-radius: .6rem; padding: .55rem .75rem; font-size: .95rem; }
-.label { display: block; font-size: .8rem; font-weight: 600; color: var(--color-muted); margin-bottom: .3rem; text-transform: uppercase; letter-spacing: .04em; }
-.chip { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .15rem .6rem; font-size: .75rem; font-weight: 600; }
+.btn-primary:hover { background: var(--color-plum); border-color: var(--color-plum); }
+.btn-outline { background: transparent; color: var(--color-ink); }
+.btn-outline:hover { background: var(--color-card); }
+.btn-lg { min-height: 56px; padding: .9rem 2rem; font-size: 1.15rem; }
+.btn-ghost { border: 1px solid var(--color-line); background: var(--color-card); color: var(--color-ink); font-weight: 600; }
+.link-cta { font-weight: 700; color: var(--color-plum); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; }
+.eyebrow { font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: .78rem; color: var(--color-rose-text); }
+.nav-link { font-weight: 700; font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; }
+.pill-tab { display: inline-flex; align-items: center; gap: .45rem; border-radius: 999px; border: 1.5px solid var(--color-line); padding: .5rem 1.1rem; font-size: .95rem; font-weight: 500; background: var(--color-card); color: var(--color-ink); white-space: nowrap; }
+.pill-tab::before { content: ""; width: 1rem; height: 1rem; border-radius: .25rem; border: 1.5px solid var(--color-edge); background: var(--color-card); flex-shrink: 0; }
+.pill-tab[aria-selected="true"] { background: var(--color-plum-soft); border-color: var(--color-plum); color: var(--color-ink); font-weight: 700; }
+.pill-tab[aria-selected="true"]::before { background: var(--color-plum) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat; border-color: var(--color-plum); }
+.tag { display: inline-flex; align-items: center; border-radius: 999px; border: 1px solid var(--color-edge); padding: .2rem .75rem; font-size: .9rem; }
+.tag-berry { border-color: var(--color-rose); color: var(--color-rose-text); }
+.tag-teal { border-color: var(--color-teal); color: var(--color-plum); }
+.input { width: 100%; border: 1.5px solid var(--color-line); background: var(--color-card); border-radius: .75rem; padding: .6rem .8rem; font-size: 1rem; }
+.label { display: block; font-size: .8rem; font-weight: 700; color: var(--color-muted); margin-bottom: .3rem; text-transform: uppercase; letter-spacing: .06em; }
+.chip { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .15rem .6rem; font-size: .8rem; font-weight: 600; }
 }
