@@ -15,7 +15,7 @@ export const en = {
 
   home: {
     topEyebrow: "Community-based observational clinical trials, run by Stanford PhD scientists",
-    lead: "Women weren't required in federally funded drug studies until 1993, and many are still left out. Make your profile and we'll go through the published studies on your medicines to show what's known for women like you, and what's still missing. Then help fill in the gaps: share what you've felt, so together we can build our own community studies.",
+    lead: "Clinical trials averaged us out. Invisible Women puts women back in by generating sex-specific drug data, personalized to your body and your medication mix, from a community-based observational trial run by Stanford PhD scientists.",
     howBtn: "How it works", pregBtn: "I'm pregnant",
     dots: { women: "Women", men: "Men", of100: "of 100", caption: "Still impaired the morning after a 10 mg dose of Ambien. In 2013 the FDA halved the dose for women.", source: "FDA, 2013" },
     rows: [
