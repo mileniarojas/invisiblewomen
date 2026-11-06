@@ -5,7 +5,7 @@ const CONTENT = {
     title: "How we did this",
     intro: "Until 1993, U.S. rules kept most women who could get pregnant out of early medicine studies. Today women are still often a minority in studies, and results are rarely shown separately for women — even though women report side effects more often. InvisibleWoman shows those gaps, one medicine at a time.",
     sections: [
-      ["Why these 10 medicines", "Each one is widely prescribed to women. In every one of them, women were under half of the study participants, or fewer than 3 in 100 studies looked at women's results separately."],
+      ["Why these medicines", "Each one is widely prescribed to women. In every one of them, women were under half of the study participants, or fewer than 3 in 100 studies looked at women's results separately."],
       ["Who was in the studies", "We collected finished studies that posted their results on ClinicalTrials.gov (the U.S. government's study registry) and counted who took part: women and men, race, Hispanic or Latina background, age and weight."],
       ["Which women were left out", "Every study has rules about who can join. We read those rules and flagged ones that turned women away — for example, being pregnant, breastfeeding, on the pill, over a certain age or above a weight limit. You can always see the exact rule."],
       ["Group by group", "For pregnant women, breastfeeding moms, older women and other groups, we also searched for studies that focused on them, and we summarized what each medicine's official FDA label says, in plain words."],
@@ -27,7 +27,7 @@ const CONTENT = {
     title: "Cómo lo hicimos",
     intro: "Hasta 1993, las reglas de EE. UU. dejaban fuera de los primeros estudios de medicamentos a la mayoría de las mujeres que podían quedar embarazadas. Hoy las mujeres siguen siendo minoría en muchos estudios y casi nunca se muestran sus resultados por separado, aunque ellas reportan más efectos secundarios. InvisibleWoman muestra esos vacíos, medicamento por medicamento.",
     sections: [
-      ["Por qué estos 10 medicamentos", "Todos se recetan mucho a mujeres. En cada uno, las mujeres fueron menos de la mitad de los participantes, o menos de 3 de cada 100 estudios revisaron los resultados de las mujeres por separado."],
+      ["Por qué estos medicamentos", "Todos se recetan mucho a mujeres. En cada uno, las mujeres fueron menos de la mitad de los participantes, o menos de 3 de cada 100 estudios revisaron los resultados de las mujeres por separado."],
       ["Quién participó", "Reunimos estudios terminados que publicaron sus resultados en ClinicalTrials.gov (el registro de estudios del gobierno de EE. UU.) y contamos quién participó: mujeres y hombres, raza, origen hispano o latino, edad y peso."],
       ["Qué mujeres quedaron fuera", "Cada estudio tiene reglas sobre quién puede participar. Leímos esas reglas y marcamos las que rechazaban a mujeres; por ejemplo, por estar embarazada, amamantar, tomar la pastilla, pasar cierta edad o cierto peso. Siempre puede ver la regla exacta (en inglés)."],
       ["Grupo por grupo", "Para mujeres embarazadas, madres que amamantan, mujeres mayores y otros grupos, también buscamos estudios centrados en ellas y resumimos en palabras sencillas lo que dice la etiqueta oficial de la FDA de cada medicamento."],

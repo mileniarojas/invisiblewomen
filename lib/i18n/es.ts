@@ -6,8 +6,8 @@ export const es: Dict = {
   lang: "es",
   langName: "Español",
   switchTo: "English",
-  bar: "Las mujeres fueron menos de la mitad de las personas en los estudios de 9 de estos 10 medicamentos comunes.",
-  nav: { how: "Cómo funciona",  drugsShort: "10 medicinas", drugs: "Los 10 medicamentos", methods: "Cómo lo hicimos", saved: "Guardados", join: "Unirse", finishProfile: "Completar perfil" },
+  bar: "Las mujeres fueron menos de la mitad de las personas en los estudios de casi todos estos medicamentos comunes.",
+  nav: { how: "Cómo funciona",  drugsShort: "Medicinas", drugs: "Medicamentos comunes", methods: "Cómo lo hicimos", saved: "Guardados", join: "Unirse", finishProfile: "Completar perfil" },
   footer: {
     disclaimer: "InvisibleWoman es para informarse, no es consejo médico. Nunca empiece, deje ni cambie un medicamento sin hablar con su médico o farmacéutico. Datos de efectos secundarios: reportes a la FDA analizados por Chandak y Tatonetti (2020). Datos de estudios: ClinicalTrials.gov. Datos de etiquetas: FDA de EE. UU.",
     methods: "Cómo lo hicimos", privacy: "Privacidad",
@@ -18,13 +18,13 @@ export const es: Dict = {
     h1a: "Su medicamento fue probado.", h1b: "¿Y usted?",
     cta: "Buscar mi medicamento", sub: "Presión · colesterol · sueño · TDAH · acidez · acné y SOP", link: "Ver lo que encontramos",
     sourcesLabel: "Hecho con datos públicos de",
-    gridTitle: "10 medicamentos de todos los días", gridSub: "Elija uno para ver en quién se probó de verdad.",
+    gridTitle: "Medicamentos comunes", gridSub: "Elija uno para ver en quién se probó de verdad.",
     tabs: { all: "Todos", heart: "Corazón y presión", cholesterol: "Colesterol", mind: "Sueño y TDAH", stomach: "Estómago", skin: "Piel y hormonas" },
     tileLabel: "mujeres en sus estudios", seeGaps: "Ver los vacíos",
     womenInTrials: (p: number) => `${p}% mujeres`, inItsTrials: "en sus estudios",
-    band: (trials: number, bySex: number) => `Las mujeres reportan más efectos secundarios que los hombres. Aun así, de ${trials.toLocaleString("es-US")} estudios de estos 10 medicamentos, solo ${bySex} revisaron cómo les fue a las mujeres por separado.`,
+    band: (trials: number, bySex: number) => `Las mujeres reportan más efectos secundarios que los hombres. Aun así, de ${trials.toLocaleString("es-US")} estudios de estos medicamentos comunes, solo ${bySex} revisaron cómo les fue a las mujeres por separado.`,
     band2: "Los leímos todos para que usted no tenga que hacerlo.",
-    leftTitle: "Las mujeres que quedaron fuera", leftSub: "En los 10 medicamentos",
+    leftTitle: "Las mujeres que quedaron fuera", leftSub: "En estos medicamentos comunes",
     left: (x) => [
       { t: "Mujeres embarazadas", items: [`No permitidas en el ${x.preg}% de los estudios`, `${x.pregRecorded} estudios anotaron quién estaba embarazada`, "La información de seguridad viene sobre todo de animales y reportes posteriores"] },
       { t: "Madres que amamantan", items: [`No permitidas en el ${x.bf}% de los estudios`, "Casi ningún estudio midió la leche materna", "Los consejos suelen basarse en muy pocas mujeres"] },
@@ -33,11 +33,11 @@ export const es: Dict = {
     ],
     howTitle: "Cómo funciona",
     steps: [
-      ["Elija su medicamento", "Empiece con uno de los 10 medicamentos que más toman las mujeres."],
+      ["Elija su medicamento", "Empiece con uno de los medicamentos comunes que toman las mujeres."],
       ["Vea en quién se probó", "Mujeres, raza, edad y embarazo, y quién quedó fuera."],
       ["Hágalo personal", "Responda unas preguntas y agregue los medicamentos que toma. Le mostraremos si se incluyó a mujeres como usted en sus estudios."],
     ],
-    resultsEyebrow: "En los 10 medicamentos", resultsTitle: "Lo que muestran los estudios",
+    resultsEyebrow: "En estos medicamentos comunes", resultsTitle: "Lo que muestran los estudios",
     results: (x) => [
       [`${x.pctWomen}%`, "de las personas en los estudios eran mujeres"],
       [`${x.bySexPct}%`, "de los estudios revisó los resultados de las mujeres por separado"],
@@ -46,7 +46,7 @@ export const es: Dict = {
     ctaTitle: "¿Probaron en mujeres como usted?", ctaBody: "Cree un perfil gratis y privado, agregue sus medicamentos y vea cómo se probó cada uno y a quién dejaron fuera.", ctaBtn: "Crear mi perfil",
   },
   drug2: {
-    liveNote: "Buscado en vivo en ClinicalTrials.gov. Este medicamento no es uno de nuestros 10 revisados a mano, así que aún no hay resumen de la etiqueta de la FDA.",
+    liveNote: "Buscado en vivo en ClinicalTrials.gov. Este medicamento no es uno de nuestros medicamentos comunes revisados a mano, así que aún no hay resumen de la etiqueta de la FDA.",
     likeMe: "¿Probaron en alguien como yo?", likeMeSub: "Elija el grupo que le corresponde.",
     checkMine: "Revisar mis medicamentos",
     goodToKnow: "Bueno saber",
@@ -56,10 +56,10 @@ export const es: Dict = {
     detailsTitle: "Todos los detalles", detailsSub: "Cada número detrás de esta página.",
     short: { pregnant: "Embarazadas", breastfeeding: "Amamantando", childbearing: "Podría quedar embarazada", birthControl: "Anticonceptivos y hormonas", older: "65 o más", color: "Mujeres de color", weight: "Más peso", menopause: "Menopausia", womenUses: "SOP, acné y pelo" },
   },
-  drugsPage: { title: "Los 10 medicamentos", intro: "Medicamentos que toman muchas mujeres, pero en sus estudios las mujeres fueron minoría o casi nunca se revisaron los resultados por separado para ellas." },
+  drugsPage: { title: "Medicamentos comunes", intro: "Medicamentos que toman muchas mujeres, pero en sus estudios las mujeres fueron minoría o casi nunca se revisaron los resultados por separado para ellas." },
 
   drug: {
-    back: "← Los 10 medicamentos",
+    back: "← Medicamentos comunes",
     statWomen: "de las personas en los estudios eran mujeres",
     statPregnant: "de los estudios no permitían mujeres embarazadas",
     statBySex: "revisaron los resultados de las mujeres por separado",
@@ -339,5 +339,5 @@ export const es: Dict = {
     bySex: "Resultados por sexo", someBySex: "Algunos resultados por sexo", notBySex: "No separados por sexo", reported: "Anotado", race: "Raza",
     leftOut: "Mujeres que quedaron fuera", none: "No encontramos reglas que dejaran fuera a mujeres.",
   },
-  notFound: { title: "No encontrado", body: "No encontramos esa página.", back: "Ver los 10 medicamentos" },
+  notFound: { title: "No encontrado", body: "No encontramos esa página.", back: "Ver medicamentos comunes" },
 };

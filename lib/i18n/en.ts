@@ -5,8 +5,8 @@ export const en = {
   lang: "en" as string,
   langName: "English",
   switchTo: "Español",
-  bar: "Women were less than half the people tested for 9 of these 10 everyday medicines.",
-  nav: { how: "How it works",  drugsShort: "10 drugs", drugs: "The 10 drugs", methods: "How we did this", saved: "Saved", join: "Join", finishProfile: "Finish profile" },
+  bar: "Women were less than half of the people tested for almost all of these common medicines.",
+  nav: { how: "How it works",  drugsShort: "Drugs", drugs: "Common drugs", methods: "How we did this", saved: "Saved", join: "Join", finishProfile: "Finish profile" },
   footer: {
     disclaimer: "InvisibleWoman is for learning, not medical advice. Never start, stop or change a medicine without talking to your doctor or pharmacist. Side-effect data: FDA reports analyzed by Chandak & Tatonetti (2020). Trial data: ClinicalTrials.gov. Drug-label facts: U.S. FDA.",
     methods: "How we did this", privacy: "Privacy",
@@ -17,13 +17,13 @@ export const en = {
     h1a: "Your medicine was tested.", h1b: "Were you?",
     cta: "Find my medicine", sub: "Blood pressure · cholesterol · sleep · ADHD · heartburn · acne & PCOS", link: "See what we found",
     sourcesLabel: "Built on public data from",
-    gridTitle: "10 everyday medicines", gridSub: "Pick one to see who it was really tested on.",
+    gridTitle: "Common medicines", gridSub: "Pick one to see who it was really tested on.",
     tabs: { all: "All", heart: "Heart & blood pressure", cholesterol: "Cholesterol", mind: "Sleep & ADHD", stomach: "Stomach", skin: "Skin & hormones" } as Record<string, string>,
     tileLabel: "women in its studies", seeGaps: "See the gaps",
     womenInTrials: (p: number) => `${p}% women`, inItsTrials: "in its studies",
-    band: (trials: number, bySex: number) => `Women report side effects more often than men. Yet out of ${trials.toLocaleString("en-US")} studies of these 10 medicines, only ${bySex} looked at how women did on their own.`,
+    band: (trials: number, bySex: number) => `Women report side effects more often than men. Yet out of ${trials.toLocaleString("en-US")} studies of these common medicines, only ${bySex} looked at how women did on their own.`,
     band2: "We read them all, so you don't have to.",
-    leftTitle: "The women left out", leftSub: "Across all 10 medicines",
+    leftTitle: "The women left out", leftSub: "Across these common medicines",
     left: (x: { preg: number; bf: number; age: number; noRace: number; pregRecorded: number }) => [
       { t: "Pregnant women", items: [`Not allowed in ${x.preg}% of studies`, `${x.pregRecorded} studies recorded who was pregnant`, "Safety info comes mostly from animals and later reports"] },
       { t: "Breastfeeding moms", items: [`Not allowed in ${x.bf}% of studies`, "Almost no study measured breast milk", "Advice often based on a handful of women"] },
@@ -32,11 +32,11 @@ export const en = {
     ],
     howTitle: "How it works",
     steps: [
-      ["Pick your medicine", "Start with one of the 10 medicines women take most."],
+      ["Pick your medicine", "Start with one of the common medicines women take."],
       ["See who was tested", "Women, race, age and pregnancy — and who was left out."],
       ["Make it about you", "Answer a few questions and add the medicines you take. We'll show whether women like you were in their studies."],
     ] as [string, string][],
-    resultsEyebrow: "Across all 10 medicines", resultsTitle: "What the studies show",
+    resultsEyebrow: "Across these common medicines", resultsTitle: "What the studies show",
     results: (x: { pctWomen: number; bySexPct: number; pregRecorded: number }) => [
       [`${x.pctWomen}%`, "of the people tested were women"],
       [`${x.bySexPct}%`, "of studies looked at women's results separately"],
@@ -45,7 +45,7 @@ export const en = {
     ctaTitle: "Were women like you tested?", ctaBody: "Make a free, private profile, add your medicines, and see how each one was tested — and who was left out.", ctaBtn: "Create my profile",
   },
   drug2: {
-    liveNote: "Looked up live from ClinicalTrials.gov. This medicine isn't one of our 10 hand-checked medicines, so there is no FDA label summary yet.",
+    liveNote: "Looked up live from ClinicalTrials.gov. This medicine isn't one of our hand-checked common medicines, so there is no FDA label summary yet.",
     likeMe: "Was someone like me tested?", likeMeSub: "Choose the group that fits you.",
     checkMine: "Check my medicines",
     goodToKnow: "Good to know",
@@ -55,10 +55,10 @@ export const en = {
     detailsTitle: "All the details", detailsSub: "Every number behind this page.",
     short: { pregnant: "Pregnant", breastfeeding: "Breastfeeding", childbearing: "Could get pregnant", birthControl: "Birth control & hormones", older: "65 and older", color: "Women of color", weight: "Higher weight", menopause: "Menopause", womenUses: "PCOS, acne & hair" } as Record<string, string>,
   },
-  drugsPage: { title: "The 10 drugs", intro: "Medicines many women take — but women were a minority in the studies, or the results were almost never looked at separately for women." },
+  drugsPage: { title: "Common drugs", intro: "Medicines many women take — but women were a minority in the studies, or the results were almost never looked at separately for women." },
 
   drug: {
-    back: "← The 10 drugs",
+    back: "← Common drugs",
     statWomen: "of the people in the studies were women",
     statPregnant: "of studies did not allow pregnant women",
     statBySex: "looked at results for women separately",
@@ -338,6 +338,6 @@ export const en = {
     bySex: "Results shown by sex", someBySex: "Some results split by sex", notBySex: "Not split by sex", reported: "Recorded", race: "Race",
     leftOut: "Women left out", none: "No rules that kept women out were found.",
   },
-  notFound: { title: "Not found", body: "We couldn't find that page.", back: "See the 10 drugs" },
+  notFound: { title: "Not found", body: "We couldn't find that page.", back: "See common drugs" },
 };
 export type Dict = typeof en;
