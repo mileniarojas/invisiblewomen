@@ -1,0 +1,59 @@
+{
+ "label": {
+  "effective": "20261006",
+  "brand": "Amlodipine and Benazepril Hydrochloride",
+  "use_in_specific_populations": "8 USE IN SPECIFIC POPULATIONS 8.1 Pregnancy Risk Summary Amlodipine and benazepril hydrochloride can cause fetal harm when administered to a pregnant woman. Use of drugs that act on the RAS during the second and third trimesters of pregnancy reduces fetal renal function and increases fetal and neonatal morbidity and death. Most epidemiologic studies examining fetal abnormalities after exposure to antihypertensive use in the first trimester have not distinguished drugs affecting the RAS from other antihypertensive agents. When pregnancy is detected, discontinue amlodipine and benazepril hydrochloride as soon as possible. The estimated background risk of major birth defects and miscarriage for the indicated population is unknown. All pregnancies have a background risk of birth defect, loss, or other adverse outcomes. In the U.S. general population, the estimated background risk of major birth defects and miscarriage in clinically recognized pregnancies is 2 to 4% and 15 to 20%, respectively. Clinical Considerations Disease-Associated Maternal and/or Embryo/Fetal Risk Hypertension in pregnancy increases the maternal risk for pre-eclampsia, gestational diabetes, premature delivery, and delivery complications (e.g., need for cesarean section, and post-partum hemorrhage). Hypertension increases the fetal risk for intrauterine growth restriction and intrauterine death. Pregnant women with hypertension should be carefully monitored and managed accordingly. Fetal/Neonatal Adverse Reactions Oligohydramnios in pregnant women who use drugs affecting the renin-angiotensin system in the second and third trimesters of pregnancy can result in the following: reduced fetal renal function leading to anuria and renal failure, fetal lung hypoplasia, skeletal deformations, including skull hypoplasia, hypotension and death. Perform serial ultrasound examinations to assess the intra-amniotic environment. Fetal testing may be appropriate, based on the week of gestation. Patients and physicians should be aware, however, that oligohydramnios may not appear until after the fetus has sustained irreversible injury. If oligohydramnios is observed, consider alternative drug treatment. Closely observe neonates with histories of in utero exposure to amlodipine and benazepril hydrochloride for hypotension, oliguria, and hyperkalemia. In neonates with a history of in utero exposure to amlodipine and benazepril hydrochloride, if oliguria or hypotension occurs, support blood pressure and renal perfusion. Exchange transfusions or dialysis may be required as a means of reversing hypotension and replacing renal function. Data Animal Data Benazepril and Amlodipine: When rats received benazepril:amlodipine at doses ranging from 5:2.5 to 50:25 mg/kg/day, dystocia was observed at an increasing dose-related incidence at all doses tested. On a body surface area basis, the 2.5 mg/kg/day dose of amlodipine is twice the amlodipine dose delivered when the maximum recommended dose of amlodipine and benazepril hydrochloride is given to a 60 kg patient. Similarly, the 5 mg/kg/day dose of benazepril is approximately equivalent with the benazepril dose delivered when the maximum recommended dose of amlodipine and benazepril hydrochloride is given to a 60 kg patient. No teratogenic effects were seen when benazepril and amlodipine were administered in combination to pregnant rats or rabbits. Rats received doses of up to 50:25 mg (benazepril:amlodipine)/kg/day (12 times the MRHD on a body surface area basis, assuming a 60 kg patient). Rabbits received doses of up to 1.5:0.75 mg/kg/day (equivalent to the maximum recommended dose of amlodipine and benazepril hydrochloride given to a 60 kg patient). 8.2 Lactation Risk Summary Minimal amounts of unchanged benazepril and of benazeprilat are excreted into the breast milk of lactating women treated with benazepril, so that a newborn child ingesting nothing but breast milk would receive less than 0.1% of the maternal doses of benazepril and benazeprilat. Limited available data from a published clinical lactation study reports that amlodipine is present in human milk at an estimated median relative infant dose of 4.2%. No adverse effects of amlodipine on the breastfed infant have been observed. There is no available information on the effects of amlodipine or benazepril on milk production. 8.4 Pediatric Use Safety and effectiveness in pediatric patients have not been established. 8.5 Geriatric Use In geriatric patients, exposure to amlodipine is increased, thus consider lower initial doses of amlodipine and benazepril hydrochloride [see Clinical Pharmacology (12.3)] . Of the total number of patients who received amlodipine and benazepril hydrochloride in U.S. clinical studies of amlodipine and benazepril hydrochloride, over 19% were 65 years or older while about 2% were 75 years or older. Overall differences in effectiveness or safety were not observed between these patients and younger patients. Clinical experience has not identified differences in responses between the elderly and younger patients, but greater sensitivity of some older individuals cannot be ruled out. 8.6 Hepatic Impairment Exposure to amlodipine is increased in patients with hepatic insufficiency, thus consider using lower doses of amlodipine and benazepril hydrochloride [see Clinical Pharmacology (12.3)] . 8.7 Renal Impairment In patients with severe renal impairment systemic exposure to benazepril is increased. The recommended dose of benazepril in this subgroup is 5 mg which is not an available strength with amlodipine and benazepril hydrochloride. Amlodipine and benazepril hydrochloride is not recommended in patients with severe renal impairment. No dose adjustment of amlodipine and benazepril hydrochloride is needed in patients with mild or moderate impairment of renal function [see Dosing and Administration (2.2), Warnings and Precautions (5.7) and Clinical Pharmacology (12.3)] ."
+ },
+ "focus": {
+  "pregnancy": [
+   {
+    "nct": "NCT04790279",
+    "title": "Amlodipine Versus Nifedipine ER for the Management of Postpartum Hypertension",
+    "status": "COMPLETED",
+    "results": true,
+    "n": 175
+   },
+   {
+    "nct": "NCT02353806",
+    "title": "Pharmacokinetics of Amlodipine Besylate at Delivery and During Lactation",
+    "status": "COMPLETED",
+    "results": true,
+    "n": 16
+   }
+  ],
+  "breastfeeding": [
+   {
+    "nct": "NCT02353806",
+    "title": "Pharmacokinetics of Amlodipine Besylate at Delivery and During Lactation",
+    "status": "COMPLETED",
+    "results": true,
+    "n": 16
+   }
+  ],
+  "menopause": [
+   {
+    "nct": "NCT07618806",
+    "title": "A Clinical Study Comparing Ankle Swelling Caused by Two Different Blood Pressure Medications, Levamlodipine and Amlodipine, in Post-menopausal Women With Mild High Blood Pressure.",
+    "status": "NOT_YET_RECRUITING",
+    "results": false,
+    "n": 344
+   },
+   {
+    "nct": "NCT00171054",
+    "title": "Efficacy and Safety of Valsartan Versus Amlodipine in Postmenopausal Women With Hypertension",
+    "status": "COMPLETED",
+    "results": true,
+    "n": 125
+   }
+  ],
+  "pcos_or_skin": [
+   {
+    "nct": "NCT02544776",
+    "title": "Amlodipine on Blood Flow of Preovulatory Follicle in Polycystic Ovarian Patients",
+    "status": "COMPLETED",
+    "results": false,
+    "n": 60
+   }
+  ]
+ }
+}
