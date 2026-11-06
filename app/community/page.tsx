@@ -4,6 +4,8 @@ import { getDrugIndex } from "@/lib/data";
 import { FEATURED, drugName } from "@/lib/featured";
 import { getT } from "@/lib/i18n/server";
 import { CommunityStats, type MedReports } from "@/components/CommunityStats";
+import { SortSelect } from "@/components/SortSelect";
+import { EXAMPLE_CONVERSATIONS } from "@/lib/exampleConversations";
 
 export async function generateMetadata() { return { title: (await getT()).t.nav.community }; }
 
@@ -42,6 +44,17 @@ export default async function Community({ searchParams }: { searchParams: Promis
 
   const posts = [...all].sort((a, b) => (sort === "top" ? b.like_count - a.like_count : 0) || +new Date(b.created_at) - +new Date(a.created_at)).slice(0, 50);
 
+  // Real member posts plus the clearly labeled example conversations.
+  const items = [
+    ...posts.map((p) => ({
+      key: p.id, example: false, title: p.body.split(/(?<=[.!?])\s|\n/)[0].slice(0, 110), href: `/drugs/${p.drug_slug}#share`,
+      author: p.author_name, votes: p.like_count, comments: 0, created: +new Date(p.created_at),
+      date: new Date(p.created_at).toLocaleDateString(lang === "es" ? "es-US" : "en-US"),
+      meds: [nameOf(p.drug_slug)], status: p.public_context?.pregnant ? C.pregnant : C.notPregnant, effects: p.side_effects.slice(0, 4),
+    })),
+    ...EXAMPLE_CONVERSATIONS.map((e, i) => ({ key: `example-${i}`, example: true, href: undefined, ...e, created: 0, date: "" })),
+  ].sort((a, b) => (sort === "top" ? b.votes - a.votes : b.created - a.created || b.votes - a.votes));
+
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
       <h1 className="font-serif text-5xl text-deep">{C.heading}</h1>
@@ -60,43 +73,31 @@ export default async function Community({ searchParams }: { searchParams: Promis
 
           <div className="mt-12 flex flex-wrap items-end justify-between gap-4">
             <h2 className="font-serif text-4xl text-deep">{C.title}</h2>
-            <nav aria-label={C.sort} className="flex items-center gap-2">
-              <span className="text-sm text-muted mr-1">{C.sort}</span>
-              {(["top", "new"] as const).map((s) => (
-                <Link key={s} href={`/community?sort=${s}`} aria-current={sort === s ? "page" : undefined}
-                  className={`btn !py-1.5 !px-4 ${sort === s ? "btn-primary" : "btn-ghost"}`}>{C[s]}</Link>
-              ))}
-            </nav>
+            <SortSelect value={sort} label={C.sort} options={[["top", C.top], ["new", C.new]]} />
           </div>
 
-          {posts.length === 0 ? (
-            <div className="card p-8 mt-6">
-              <p className="text-lg">{C.empty}</p>
-              <Link href="/drugs" className="btn btn-primary mt-5">{C.browse}</Link>
-            </div>
-          ) : (
-            <ul className="mt-6 space-y-4">
-              {posts.map((p) => {
-                const title = p.body.split(/(?<=[.!?])\s|\n/)[0].slice(0, 110);
-                return (
-                  <li key={p.id} className="card grid grid-cols-[4.5rem_1fr] overflow-hidden">
-                    <div className="border-r border-line flex flex-col items-center justify-center gap-1 py-5 font-bold">
-                      <span aria-hidden>▲</span><span>{p.like_count}</span>
-                    </div>
-                    <Link href={`/drugs/${p.drug_slug}#share`} className="p-5 sm:p-6 block hover:bg-paper/60">
-                      <h3 className="font-serif text-2xl">{title}</h3>
-                      <p className="text-muted mt-1">{p.author_name} · {new Date(p.created_at).toLocaleDateString(lang === "es" ? "es-US" : "en-US")}</p>
-                      <div className="flex flex-wrap gap-2 mt-3">
-                        <span className="tag capitalize">{nameOf(p.drug_slug)}</span>
-                        <span className="tag tag-berry">{p.public_context?.pregnant ? C.pregnant : C.notPregnant}</span>
-                        {p.side_effects.slice(0, 4).map((s) => <span key={s} className="tag tag-teal">{s}</span>)}
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+          <ul className="mt-6 space-y-4">
+            {items.map((it) => (
+              <li key={it.key} className="card grid grid-cols-[4.5rem_1fr] sm:grid-cols-[5.5rem_1fr] overflow-hidden">
+                <div className="border-r border-line flex flex-col items-center justify-center gap-2 py-5 font-bold text-lg">
+                  <span aria-hidden className="text-2xl leading-none">▲</span><span>{it.votes}</span>
+                </div>
+                <div className="p-5 sm:p-6">
+                  <h3 className="font-serif text-2xl">{it.href ? <Link href={it.href} className="hover:text-rose">{it.title}</Link> : it.title}</h3>
+                  <p className="text-muted mt-1 flex flex-wrap items-center gap-2">
+                    <span>{it.author}</span>
+                    {it.example && <><span aria-hidden>·</span><span className="rounded-full border-2 border-dashed border-rose px-3 py-0.5 font-bold text-rose-text">{C.example}</span></>}
+                    <span aria-hidden>·</span><span>{it.example ? C.commentsCount(it.comments) : it.date}</span>
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {it.meds.map((m) => <span key={m} className={`tag ${it.example ? "" : "capitalize"}`}>{m}</span>)}
+                    <span className="tag tag-berry">{it.status}</span>
+                    {it.effects.map((e) => <span key={e} className="tag tag-teal">{e}</span>)}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </>
       )}
       <p className="text-muted mt-8">{C.comments}</p>

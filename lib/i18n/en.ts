@@ -407,6 +407,7 @@ export const en = {
   },
   communityPage: {
     heading: "Community", sub: "What members notice, counted. Every post adds to the study.",
+    example: "Example", commentsCount: (k: number) => `${k} comment${k === 1 ? "" : "s"}`,
     pickTitle: "Side effects members report", pickHint: "pick one or more", studyReports: (k: number) => `${k} study report${k === 1 ? "" : "s"}`,
     headline: (p: number, meds: string, effect: string) => `${p}% of members taking ${meds} reported ${effect}.`,
     outOf: (k: number, meds: string) => `Out of ${k} member${k === 1 ? "" : "s"} taking ${meds}.`,
