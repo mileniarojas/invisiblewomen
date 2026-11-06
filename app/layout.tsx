@@ -30,10 +30,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </Link>
               <div className="hidden lg:flex justify-center gap-6 xl:gap-8 text-xs font-semibold uppercase tracking-[0.12em] whitespace-nowrap">
                 <Link href="/drugs" className="hover:text-rose">{t.nav.drugs}</Link>
-                <Link href="/#how" className="hover:text-rose">{t.nav.how}</Link>
                 <Link href="/pregnancy" className="hover:text-rose">{t.nav.pregnancy}</Link>
                 <Link href="/community" className="hover:text-rose">{t.nav.community}</Link>
-                <Link href="/about" className="hover:text-rose">{t.nav.methods}</Link>
                 {user && <Link href="/my" className="hover:text-rose">{t.my.title}</Link>}
               </div>
               <div className="flex items-center gap-2 justify-end col-start-3">
@@ -48,10 +46,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </nav>
             <div className="lg:hidden border-t border-line overflow-x-auto">
               <div className="flex gap-5 px-4 py-2 text-xs font-semibold uppercase tracking-wider whitespace-nowrap">
-                <Link href="/#how" className="hover:text-rose">{t.nav.how}</Link>
                 <Link href="/pregnancy" className="hover:text-rose">{t.nav.pregnancy}</Link>
                 <Link href="/community" className="hover:text-rose">{t.nav.community}</Link>
-                <Link href="/about" className="hover:text-rose">{t.nav.methods}</Link>
               </div>
             </div>
           </header>

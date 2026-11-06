@@ -36,37 +36,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how" className="bg-card border-y border-line scroll-mt-20">
-        <div className="mx-auto max-w-6xl px-4 py-20 grid gap-10 md:grid-cols-2 items-center">
-          <div className="rounded-2xl bg-sage-soft/60 aspect-[4/3] flex items-center justify-center p-10">
-            <div className="grid grid-cols-5 gap-3" aria-hidden>
-              {Array.from({ length: 25 }).map((_, i) => (
-                <svg key={i} viewBox="0 0 24 24" className={`w-8 h-8 sm:w-10 sm:h-10 ${i % 5 < 2 ? "text-rose" : "text-deep/25"}`}>
-                  <circle cx="12" cy="7" r="4" fill="currentColor" />
-                  <path d="M4 22c1-6 4-9 8-9s7 3 8 9z" fill="currentColor" />
-                </svg>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h2 className="font-serif text-4xl sm:text-5xl text-deep mb-8">{h.howTitle}</h2>
-            <ol className="space-y-6">
-              {[...h.steps, t.gaps.step].map(([a, b], i) => (
-                <li key={a} className="flex gap-4">
-                  <span className="shrink-0 w-10 h-10 rounded-full bg-card border border-line flex items-center justify-center text-rose font-semibold">{i + 1}</span>
-                  <div><p className="font-semibold text-deep text-lg">{a}</p><p className="text-sm text-muted">{b}</p></div>
-                </li>
-              ))}
-            </ol>
-            <div className="mt-10 flex flex-wrap items-center gap-6">
-              <Link href="/login" className="btn btn-primary btn-lg">{h.ctaBtn}</Link>
-              <a href="#medicines" className="link-cta text-deep">{h.howBrowse}</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Statement band */}
       <section id="found" className="bg-rose-soft scroll-mt-20">
         <div className="mx-auto max-w-3xl px-4 py-16 sm:py-20 text-center">
