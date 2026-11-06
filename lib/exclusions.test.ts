@@ -38,3 +38,22 @@ test("age parsing", () => {
   assert.equal(parseAgeYears("6 Months"), 0.5);
   assert.equal(parseAgeYears(null), null);
 });
+
+test("health-condition and smoking exclusions", () => {
+  const c = `Inclusion Criteria:
+- Adults with insomnia
+
+Exclusion Criteria:
+- History of myocardial infarction or heart failure
+- Type 1 or type 2 diabetes mellitus
+- History of seizures
+- Current major depressive disorder or bipolar disorder
+- Active malignancy within 5 years
+- Current smokers (more than 10 cigarettes per day)`;
+  assert.deepEqual(flags(parseExclusions({ criteria: c })), ["cancer_excluded", "diabetes_excluded", "heart_excluded", "mental_health_excluded", "seizure_excluded", "smoker_excluded"].sort());
+  assert.deepEqual(flags(parseExclusions({ criteria: "Inclusion Criteria:\n- Non-smokers\n\nExclusion Criteria:\n- None" })), []);
+});
+
+test("respiratory depression is not a mental health exclusion", () => {
+  assert.deepEqual(flags(parseExclusions({ criteria: "Exclusion Criteria:\n- Severe respiratory depression\n- Use of CNS depressants" })), []);
+});

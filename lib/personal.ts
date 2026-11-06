@@ -18,6 +18,9 @@ export type ProfileLike = {
   hormonal_contraception: boolean;
   hormone_therapy: boolean;
   kidney_or_liver_disease: boolean;
+  conditions?: string[];
+  smoking?: string;
+  surgeries?: string[];
 };
 
 export const ageOf = (p: ProfileLike) => new Date().getFullYear() - p.birth_year;
@@ -81,6 +84,14 @@ export function personalRows(p: ProfileLike, d: DrugDetail, t: Dict): PersonalRo
       : { status: "unknown", text: P.raceUnknown(t.lang === "es" ? "hispana o latina" : "Hispanic or Latina") });
   }
   if (p.kidney_or_liver_disease && ex.kidney_liver_excluded) rows.push({ status: sev(ex.kidney_liver_excluded), text: P.kidney(r(ex.kidney_liver_excluded)) });
+  const CONDITION_FLAG: Record<string, keyof typeof ex> = {
+    heart: "heart_excluded", diabetes: "diabetes_excluded", seizures: "seizure_excluded", mental_health: "mental_health_excluded", cancer: "cancer_excluded",
+  };
+  for (const c of p.conditions ?? []) {
+    const flag = CONDITION_FLAG[c];
+    if (flag && ex[flag]) rows.push({ status: sev(ex[flag]), text: c === "mental_health" ? P.mentalHealth(r(ex[flag])) : P.conditionExcluded(P.condShort[c], r(ex[flag])) });
+  }
+  if (p.smoking === "current" && ex.smoker_excluded) rows.push({ status: sev(ex.smoker_excluded), text: P.smoker(r(ex.smoker_excluded)) });
   if (p.menopause_status === "peri" || p.menopause_status === "post") rows.push({ status: "unknown", text: P.menopause(r(rep.menopause)) });
 
   const bySex = r(rep.sexStratified);

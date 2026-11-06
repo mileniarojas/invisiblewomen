@@ -45,6 +45,9 @@ export type ProfileRow = {
   conditions: string[];
   allergies: string[];
   kidney_or_liver_disease: boolean;
+  birth_control_type: string;
+  smoking: string;
+  surgeries: string[];
   consent_at: string;
 };
 export type MedRow = { id: string; rxcui: string | null; name: string; dose: string | null; kind: string };

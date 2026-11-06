@@ -6,20 +6,25 @@ import { useLang, useT } from "@/lib/i18n/client";
 import type { MedRow, ProfileRow } from "@/lib/supabase/server";
 import { MedicationPicker, type Med } from "./ProfileForm";
 
+const HORMONAL_BC = ["pill", "patch", "ring", "shot", "implant", "hormonal_iud"];
+const CONDITION_KEYS = ["heart", "high_bp", "diabetes", "thyroid", "kidney", "liver", "mental_health", "seizures", "cancer", "autoimmune", "pcos", "endometriosis", "migraine", "asthma", "osteoporosis"];
+
 type Answers = {
   display_name: string; birth_year: string;
   units: "us" | "metric"; ft: string; inch: string; lb: string; cm: string; kg: string;
   race: string[]; hispanic: "yes" | "no" | "prefer_not" | "";
   sex_at_birth: string; gender_identity: string;
   pregnancy_status: string; breastfeeding: boolean;
-  menopause_status: string; hormonal_contraception: boolean; hormone_therapy: boolean;
-  conditions: string; allergies: string; kidney_or_liver_disease: boolean;
+  menopause_status: string; surgeries: string[];
+  bc_type: string; menoHrt: boolean; genderHrt: boolean;
+  condKeys: string[]; conditionsOther: string; allergies: string; smoking: string;
   meds: Med[]; noMeds: boolean; consent: boolean;
 };
 
 function initial(p: ProfileRow | null, meds: MedRow[], lang: string): Answers {
   const cm = p?.height_cm ?? null, kg = p?.weight_kg ?? null;
   const totalIn = cm ? cm / 2.54 : null;
+  const conds = p?.conditions ?? [];
   return {
     display_name: p?.display_name ?? "", birth_year: p?.birth_year ? String(p.birth_year) : "",
     units: lang === "es" ? "metric" : "us",
@@ -29,8 +34,10 @@ function initial(p: ProfileRow | null, meds: MedRow[], lang: string): Answers {
     hispanic: p?.race_ethnicity?.includes("hispanic") ? "yes" : p ? "no" : "",
     sex_at_birth: p?.sex_at_birth ?? "female", gender_identity: p?.gender_identity ?? "",
     pregnancy_status: p?.pregnancy_status ?? "no", breastfeeding: p?.breastfeeding ?? false,
-    menopause_status: p?.menopause_status ?? "unknown", hormonal_contraception: p?.hormonal_contraception ?? false, hormone_therapy: p?.hormone_therapy ?? false,
-    conditions: p?.conditions.join(", ") ?? "", allergies: p?.allergies.join(", ") ?? "", kidney_or_liver_disease: p?.kidney_or_liver_disease ?? false,
+    menopause_status: p?.menopause_status ?? "unknown", surgeries: p?.surgeries ?? [],
+    bc_type: p?.birth_control_type ?? (p?.hormonal_contraception ? "pill" : "none"), menoHrt: p?.hormone_therapy ?? false, genderHrt: false,
+    condKeys: conds.filter((c) => CONDITION_KEYS.includes(c)), conditionsOther: conds.filter((c) => !CONDITION_KEYS.includes(c)).join(", "),
+    allergies: p?.allergies.join(", ") ?? "", smoking: p?.smoking ?? "never",
     meds: meds.filter((m) => m.name !== "none"), noMeds: meds.some((m) => m.name === "none"), consent: !!p,
   };
 }
@@ -43,9 +50,9 @@ function bodyMetric(a: Answers) {
   return { cm: ft !== null ? Math.round((ft * 12 + inch) * 2.54 * 10) / 10 : null, kg: lb !== null ? Math.round((lb / 2.2046) * 10) / 10 : null };
 }
 
-function Choice({ options, value, onChange, multi }: { options: [string, string][]; value: string | string[]; onChange: (v: string) => void; multi?: boolean }) {
+function Choice({ options, value, onChange, multi, cols = 2 }: { options: [string, string][]; value: string | string[]; onChange: (v: string) => void; multi?: boolean; cols?: 1 | 2 }) {
   return (
-    <div className="grid gap-2 sm:grid-cols-2" role={multi ? "group" : "radiogroup"}>
+    <div className={`grid gap-2 ${cols === 2 ? "sm:grid-cols-2" : ""}`} role={multi ? "group" : "radiogroup"}>
       {options.map(([v, l]) => {
         const on = Array.isArray(value) ? value.includes(v) : value === v;
         return (
@@ -68,7 +75,9 @@ function Toggle({ label, value, onChange }: { label: string; value: boolean; onC
   );
 }
 
-export function ProfileWizard({ userId, profile, meds }: { userId: string; profile: ProfileRow | null; meds: MedRow[] }) {
+const toggleIn = (list: string[], v: string) => (list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
+
+export function ProfileWizard({ userId, profile, meds, doneHref = "/my", preview = false }: { userId: string; profile: ProfileRow | null; meds: MedRow[]; doneHref?: string; preview?: boolean }) {
   const all = useT(), w = all.wizard, pt = all.profile, lang = useLang();
   const router = useRouter();
   const [a, setA] = useState<Answers>(() => initial(profile, meds, lang));
@@ -79,13 +88,18 @@ export function ProfileWizard({ userId, profile, meds }: { userId: string; profi
   const { cm, kg } = bodyMetric(a);
   const bmi = cm && kg ? Math.round((kg / (cm / 100) ** 2) * 10) / 10 : null;
   const year = new Date().getFullYear();
+  const maleAtBirth = a.sex_at_birth === "male";
 
-  const steps: { q: string; help?: string; valid?: () => string | null; body: React.ReactNode }[] = [
-    { q: w.nameQ, help: w.nameHelp, valid: () => (a.display_name.trim().length >= 2 && a.display_name.trim().length <= 40 ? null : w.needName),
-      body: <input autoFocus className="input !text-lg !py-3" value={a.display_name} onChange={(e) => set("display_name", e.target.value)} placeholder={pt.displayPh} maxLength={40} /> },
-    { q: w.birthQ, help: w.birthHelp, valid: () => { const y = Number(a.birth_year); return y >= 1900 && y <= year - 13 ? null : w.needYear; },
-      body: <input autoFocus inputMode="numeric" className="input !text-lg !py-3 max-w-[10rem]" value={a.birth_year} onChange={(e) => set("birth_year", e.target.value.replace(/\D/g, "").slice(0, 4))} placeholder="1990" /> },
-    { q: w.bodyQ, help: w.bodyHelp,
+  const allSteps: { q: string; help?: string; optional?: boolean; show?: boolean; valid?: () => string | null; body: React.ReactNode }[] = [
+    { q: w.aboutQ, help: w.nameHelp,
+      valid: () => (a.display_name.trim().length < 2 || a.display_name.trim().length > 40 ? w.needName : !(Number(a.birth_year) >= 1900 && Number(a.birth_year) <= year - 13) ? w.needYear : null),
+      body: (
+        <div className="space-y-5">
+          <label className="block"><span className="label">{w.nameQ}</span><input autoFocus className="input !text-lg !py-3" value={a.display_name} onChange={(e) => set("display_name", e.target.value)} placeholder={pt.displayPh} maxLength={40} /></label>
+          <label className="block"><span className="label">{w.birthQ}</span><input inputMode="numeric" className="input !text-lg !py-3 max-w-[10rem]" value={a.birth_year} onChange={(e) => set("birth_year", e.target.value.replace(/\D/g, "").slice(0, 4))} placeholder="1990" /></label>
+        </div>
+      ) },
+    { q: w.bodyQ, help: w.bodyHelp, optional: true,
       body: (
         <div className="space-y-4">
           <div className="flex gap-2">
@@ -106,11 +120,11 @@ export function ProfileWizard({ userId, profile, meds }: { userId: string; profi
           {bmi && bmi > 10 && bmi < 80 && <p className="text-sm text-muted">{w.bmi(bmi)}</p>}
         </div>
       ) },
-    { q: w.raceQ, help: w.raceHelp,
+    { q: w.raceQ, help: w.raceHelp, optional: true,
       body: (
         <div className="space-y-6">
           <Choice multi options={Object.entries(all.raceOptions)} value={a.race}
-            onChange={(v) => set("race", a.race.includes(v) ? a.race.filter((x) => x !== v) : [...a.race.filter((x) => (v === "prefer_not" ? false : x !== "prefer_not")), v])} />
+            onChange={(v) => set("race", v === "prefer_not" ? ["prefer_not"] : toggleIn(a.race.filter((x) => x !== "prefer_not"), v))} />
           <div>
             <p className="font-medium mb-2">{w.hispQ}</p>
             <Choice options={[["yes", w.yes], ["no", w.no], ["prefer_not", w.preferNot]]} value={a.hispanic} onChange={(v) => set("hispanic", v as Answers["hispanic"])} />
@@ -124,30 +138,59 @@ export function ProfileWizard({ userId, profile, meds }: { userId: string; profi
           <label className="block"><span className="label">{w.genderQ}</span><input className="input" value={a.gender_identity} onChange={(e) => set("gender_identity", e.target.value)} /></label>
         </div>
       ) },
-    { q: w.pregQ,
+    { q: w.pregQ, show: !maleAtBirth,
       body: (
         <div className="space-y-6">
           <Choice options={[["no", pt.notPregnant], ["pregnant", pt.pregnant], ["trying", pt.trying], ["postpartum", pt.postpartum], ["prefer_not", pt.preferNot]]} value={a.pregnancy_status} onChange={(v) => set("pregnancy_status", v)} />
           <div><p className="font-medium mb-2">{w.bfQ}</p><Choice options={[["yes", w.yes], ["no", w.no]]} value={a.breastfeeding ? "yes" : "no"} onChange={(v) => set("breastfeeding", v === "yes")} /></div>
         </div>
       ) },
-    { q: w.menoQ,
+    { q: w.periodsQ, show: !maleAtBirth,
       body: (
         <div className="space-y-6">
           <Choice options={[["pre", pt.pre], ["peri", pt.peri], ["post", pt.post], ["unknown", pt.unsure]]} value={a.menopause_status} onChange={(v) => set("menopause_status", v)} />
           <div className="space-y-2">
-            <p className="font-medium">{w.hormoneQ}</p>
-            <Toggle label={w.bcLabel} value={a.hormonal_contraception} onChange={(v) => set("hormonal_contraception", v)} />
-            <Toggle label={w.hrtLabel} value={a.hormone_therapy} onChange={(v) => set("hormone_therapy", v)} />
+            <p className="font-medium">{w.surgeryQ} <span className="text-muted font-normal text-sm">({w.optional})</span></p>
+            <Choice multi options={Object.entries(w.surgeries)} value={a.surgeries} onChange={(v) => set("surgeries", toggleIn(a.surgeries, v))} />
           </div>
         </div>
       ) },
-    { q: w.healthQ, help: w.healthHelp,
+    { q: maleAtBirth ? w.otherHormonesQ : w.bcQ,
       body: (
-        <div className="space-y-4">
-          <label className="block"><span className="label">{pt.condList}</span><input className="input" value={a.conditions} onChange={(e) => set("conditions", e.target.value)} placeholder={pt.condPh} /></label>
-          <label className="block"><span className="label">{pt.allergies}</span><input className="input" value={a.allergies} onChange={(e) => set("allergies", e.target.value)} placeholder={pt.allergyPh} /></label>
-          <Toggle label={pt.kidneyLiver} value={a.kidney_or_liver_disease} onChange={(v) => set("kidney_or_liver_disease", v)} />
+        <div className="space-y-6">
+          {!maleAtBirth && <Choice options={Object.entries(w.bcTypes)} value={a.bc_type} onChange={(v) => set("bc_type", v)} />}
+          <div className="space-y-2">
+            {!maleAtBirth && <p className="font-medium">{w.otherHormonesQ}</p>}
+            <Toggle label={w.menoHrt} value={a.menoHrt} onChange={(v) => set("menoHrt", v)} />
+            <Toggle label={w.genderHrt} value={a.genderHrt} onChange={(v) => set("genderHrt", v)} />
+          </div>
+        </div>
+      ) },
+    { q: w.conditionsQ, help: w.conditionsHelp, optional: true,
+      body: (
+        <div className="space-y-6">
+          <div className="flex flex-wrap gap-2">
+            {Object.entries(w.conditionOptions).map(([k, l]) => {
+              const on = a.condKeys.includes(k);
+              return (
+                <button key={k} type="button" role="checkbox" aria-checked={on} onClick={() => set("condKeys", toggleIn(a.condKeys, k))}
+                  className={`rounded-full border px-4 py-2 text-sm transition ${on ? "border-deep bg-deep text-paper" : "border-line bg-card hover:border-rose"}`}>{l}</button>
+              );
+            })}
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block"><span className="label">{w.otherConditions}</span><input className="input" value={a.conditionsOther} onChange={(e) => set("conditionsOther", e.target.value)} /></label>
+            <label className="block"><span className="label">{pt.allergies}</span><input className="input" value={a.allergies} onChange={(e) => set("allergies", e.target.value)} placeholder={pt.allergyPh} /></label>
+          </div>
+          <div>
+            <p className="font-medium mb-2">{w.smokeQ}</p>
+            <div className="flex flex-wrap gap-2">
+              {Object.entries(w.smoke).map(([k, l]) => (
+                <button key={k} type="button" role="radio" aria-checked={a.smoking === k} onClick={() => set("smoking", k)}
+                  className={`rounded-full border px-4 py-2 text-sm transition ${a.smoking === k ? "border-deep bg-deep text-paper" : "border-line bg-card hover:border-rose"}`}>{l}</button>
+              ))}
+            </div>
+          </div>
         </div>
       ) },
     { q: w.medsQ, help: w.medsHelp, valid: () => (a.meds.length || a.noMeds ? null : w.needMeds),
@@ -173,18 +216,20 @@ export function ProfileWizard({ userId, profile, meds }: { userId: string; profi
               [pt.displayName, a.display_name], [pt.birthYear, a.birth_year],
               ["BMI", bmi ? String(bmi) : "—"],
               [pt.raceEth, [...a.race.map((r) => all.raceOptions[r]), a.hispanic === "yes" ? w.hispQ.replace(/[¿?]/g, "") : null].filter(Boolean).join(", ") || "—"],
+              [pt.conditions, [...a.condKeys.map((c) => w.conditionOptions[c]), a.conditionsOther].filter(Boolean).join(", ") || "—"],
               [pt.meds, a.noMeds ? pt.noMeds : a.meds.map((m) => m.name).join(", ")],
-            ].map(([k, v]) => <div key={k} className="grid grid-cols-[9rem_1fr] gap-3 px-4 py-3"><dt className="text-muted">{k}</dt><dd className="capitalize-first">{v}</dd></div>)}
+            ].map(([k, v]) => <div key={k} className="grid grid-cols-[9rem_1fr] gap-3 px-4 py-3"><dt className="text-muted">{k}</dt><dd>{v}</dd></div>)}
           </dl>
           <Toggle label={pt.consent} value={a.consent} onChange={(v) => set("consent", v)} />
         </div>
       ) },
   ];
-
-  const cur = steps[step];
-  const last = step === steps.length - 1;
+  const steps = allSteps.filter((s) => s.show !== false);
+  const cur = steps[Math.min(step, steps.length - 1)];
+  const last = step >= steps.length - 1;
 
   const save = async () => {
+    if (preview) return router.push("/my?preview=1"); // development preview: nothing is saved
     setBusy(true); setErr(null);
     const sb = supabaseBrowser();
     const list = (x: string) => x.split(",").map((s) => s.trim()).filter(Boolean);
@@ -192,11 +237,14 @@ export function ProfileWizard({ userId, profile, meds }: { userId: string; profi
     const { error } = await sb.from("profiles").upsert({
       user_id: userId, display_name: a.display_name.trim(), birth_year: Number(a.birth_year),
       sex_at_birth: a.sex_at_birth, gender_identity: a.gender_identity.trim() || null, race_ethnicity: race,
-      height_cm: cm, weight_kg: kg, pregnancy_status: a.pregnancy_status, breastfeeding: a.breastfeeding,
-      menopause_status: a.menopause_status,
-      hormonal_contraception: a.hormonal_contraception || a.meds.some((m) => m.kind === "contraceptive"),
-      hormone_therapy: a.hormone_therapy || a.meds.some((m) => m.kind === "hormone"),
-      conditions: list(a.conditions), allergies: list(a.allergies), kidney_or_liver_disease: a.kidney_or_liver_disease,
+      height_cm: cm, weight_kg: kg,
+      pregnancy_status: maleAtBirth ? "no" : a.pregnancy_status, breastfeeding: !maleAtBirth && a.breastfeeding,
+      menopause_status: maleAtBirth ? "unknown" : a.menopause_status, surgeries: maleAtBirth ? [] : a.surgeries,
+      birth_control_type: maleAtBirth ? "none" : a.bc_type,
+      hormonal_contraception: (!maleAtBirth && HORMONAL_BC.includes(a.bc_type)) || a.meds.some((m) => m.kind === "contraceptive"),
+      hormone_therapy: a.menoHrt || a.genderHrt || a.meds.some((m) => m.kind === "hormone"),
+      conditions: [...a.condKeys, ...list(a.conditionsOther)], allergies: list(a.allergies),
+      kidney_or_liver_disease: a.condKeys.includes("kidney") || a.condKeys.includes("liver"), smoking: a.smoking,
       consent_at: profile?.consent_at ?? new Date().toISOString(), updated_at: new Date().toISOString(),
     });
     if (error) { setBusy(false); return setErr(error.message); }
@@ -205,7 +253,7 @@ export function ProfileWizard({ userId, profile, meds }: { userId: string; profi
     const { error: e2 } = await sb.from("profile_medications").insert(rows);
     setBusy(false);
     if (e2) return setErr(e2.message);
-    router.push("/my");
+    router.push(doneHref);
     router.refresh();
   };
 
@@ -219,10 +267,11 @@ export function ProfileWizard({ userId, profile, meds }: { userId: string; profi
   return (
     <div>
       <div className="flex items-center justify-between text-sm text-muted mb-2">
-        <span>{w.stepOf(step + 1, steps.length)}</span>
+        <span>{w.stepOf(Math.min(step, steps.length - 1) + 1, steps.length)}</span>
+        {cur.optional && <span className="chip bg-sage-soft text-sage">{w.optional}</span>}
       </div>
       <div className="h-1.5 rounded-full bg-rose-soft overflow-hidden mb-10" aria-hidden>
-        <div className="h-full bg-deep transition-all" style={{ width: `${((step + 1) / steps.length) * 100}%` }} />
+        <div className="h-full bg-deep transition-all" style={{ width: `${((Math.min(step, steps.length - 1) + 1) / steps.length) * 100}%` }} />
       </div>
       <form onSubmit={(e) => { e.preventDefault(); next(); }}>
         <h2 className="font-serif text-3xl sm:text-4xl text-deep">{cur.q}</h2>

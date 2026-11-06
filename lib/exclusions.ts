@@ -11,7 +11,13 @@ export type ExclusionFlag =
   | "postmenopausal_only"
   | "older_adults_excluded"
   | "bmi_limit"
-  | "kidney_liver_excluded";
+  | "kidney_liver_excluded"
+  | "heart_excluded"
+  | "diabetes_excluded"
+  | "seizure_excluded"
+  | "mental_health_excluded"
+  | "cancer_excluded"
+  | "smoker_excluded";
 
 export interface Exclusion {
   flag: ExclusionFlag;
@@ -30,6 +36,12 @@ export const FLAG_LABELS: Record<ExclusionFlag, { label: string; who: string }> 
   older_adults_excluded: { label: "Older adults excluded", who: "Older women — who are the majority of people over 65." },
   bmi_limit: { label: "Body size (BMI) limit", who: "Women outside the allowed BMI range, often women with obesity." },
   kidney_liver_excluded: { label: "Kidney / liver disease excluded", who: "Women with reduced kidney or liver function." },
+  heart_excluded: { label: "Heart disease excluded", who: "Women with heart disease, heart rhythm problems or a past heart attack." },
+  diabetes_excluded: { label: "Diabetes excluded", who: "Women with diabetes." },
+  seizure_excluded: { label: "Seizures excluded", who: "Women with epilepsy or a history of seizures." },
+  mental_health_excluded: { label: "Mental health conditions excluded", who: "Women with depression, bipolar disorder or other mental health conditions." },
+  cancer_excluded: { label: "Cancer excluded", who: "Women with current or past cancer." },
+  smoker_excluded: { label: "Smokers excluded", who: "Women who smoke or use nicotine." },
 };
 
 const RULES: { flag: ExclusionFlag; section: "exclusion" | "inclusion" | "any"; re: RegExp; unless?: RegExp }[] = [
@@ -44,6 +56,12 @@ const RULES: { flag: ExclusionFlag; section: "exclusion" | "inclusion" | "any"; 
   { flag: "postmenopausal_only", section: "inclusion", re: /post-?menopausal|surgically steril|not of (childbearing|child-bearing) potential/i, unless: /or (using|use|practicing|agree)|contracept/i },
   { flag: "bmi_limit", section: "any", re: /\bBMI\b|body mass index/i },
   { flag: "kidney_liver_excluded", section: "exclusion", re: /(renal|kidney|hepatic|liver) (impairment|insufficiency|disease|failure|dysfunction)|creatinine clearance/i },
+  { flag: "heart_excluded", section: "exclusion", re: /(cardiac|cardiovascular|heart|coronary) (disease|failure|condition|arrhythmia|event)|myocardial infarction|heart attack|\bangina\b|arrhythmia|QTc? (prolong|interval)/i },
+  { flag: "diabetes_excluded", section: "exclusion", re: /diabet/i, unless: /without diabetes|non-?diabetic/i },
+  { flag: "seizure_excluded", section: "exclusion", re: /seizure|epilep|convuls/i },
+  { flag: "mental_health_excluded", section: "exclusion", re: /psychiatric|(?<!(respiratory|cns|central nervous system|bone marrow|myocardial|immune) )\bdepressi(on|ve)\b|bipolar|schizophren|psychos|suicid|mental (illness|disorder|health)/i },
+  { flag: "cancer_excluded", section: "exclusion", re: /malignan|\bcancer|neoplasm|carcinoma|oncolog/i },
+  { flag: "smoker_excluded", section: "exclusion", re: /\bsmok|tobacco|nicotine|cigarette/i, unless: /non-?smok/i },
 ];
 
 /** Split text into inclusion/exclusion criterion lines. */
