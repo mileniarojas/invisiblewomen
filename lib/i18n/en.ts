@@ -31,10 +31,11 @@ export const en = {
       { t: "Women of color", items: [`No race data in ${x.noRace}% of studies`, "Never counted by sex", "Unknown if doses work the same"] },
     ],
     howTitle: "How it works",
+    howBrowse: "Or browse common medicines",
     steps: [
-      ["Pick your medicine", "Start with one of the common medicines women take."],
-      ["See who was tested", "Women, race, age and pregnancy — and who was left out."],
-      ["Make it about you", "Answer a few questions and add the medicines you take. We'll show whether women like you were in their studies."],
+      ["Make it about you", "Create a free, private profile and answer a few quick questions: age, height and weight, race, pregnancy and hormones."],
+      ["Pick your medicine", "Add the medicines you take, or choose one of the common medicines women take."],
+      ["See the stats", "See how many women were in its studies, who was left out, and whether women like you were included."],
     ] as [string, string][],
     resultsEyebrow: "Across these common medicines", resultsTitle: "What the studies show",
     results: (x: { pctWomen: number; bySexPct: number; pregRecorded: number }) => [

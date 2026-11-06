@@ -58,7 +58,10 @@ export default async function Home() {
                 </li>
               ))}
             </ol>
-            <a href="#medicines" className="btn btn-primary btn-lg mt-10">{h.cta}</a>
+            <div className="mt-10 flex flex-wrap items-center gap-6">
+              <Link href="/login" className="btn btn-primary btn-lg">{h.ctaBtn}</Link>
+              <a href="#medicines" className="link-cta text-deep">{h.howBrowse}</a>
+            </div>
           </div>
         </div>
       </section>

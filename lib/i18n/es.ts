@@ -32,10 +32,11 @@ export const es: Dict = {
       { t: "Mujeres de color", items: [`Sin datos de raza en el ${x.noRace}% de los estudios`, "Nunca se contaron por sexo", "No se sabe si las dosis funcionan igual"] },
     ],
     howTitle: "Cómo funciona",
+    howBrowse: "O vea los medicamentos comunes",
     steps: [
-      ["Elija su medicamento", "Empiece con uno de los medicamentos comunes que toman las mujeres."],
-      ["Vea en quién se probó", "Mujeres, raza, edad y embarazo, y quién quedó fuera."],
-      ["Hágalo personal", "Responda unas preguntas y agregue los medicamentos que toma. Le mostraremos si se incluyó a mujeres como usted en sus estudios."],
+      ["Hágalo personal", "Cree un perfil gratis y privado y responda unas preguntas rápidas: edad, estatura y peso, raza, embarazo y hormonas."],
+      ["Elija su medicamento", "Agregue los medicamentos que toma o elija uno de los medicamentos comunes que toman las mujeres."],
+      ["Vea los datos", "Vea cuántas mujeres hubo en sus estudios, a quién dejaron fuera y si se incluyó a mujeres como usted."],
     ],
     resultsEyebrow: "En estos medicamentos comunes", resultsTitle: "Lo que muestran los estudios",
     results: (x) => [
