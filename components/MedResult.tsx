@@ -5,6 +5,7 @@ import { getT } from "@/lib/i18n/server";
 import { personalRows, type ProfileLike } from "@/lib/personal";
 import type { MedRow } from "@/lib/supabase/server";
 import { StatusDot } from "./StatusDot";
+import { Evidence } from "./Evidence";
 
 
 export function MedSkeleton({ name }: { name: string }) {
@@ -52,7 +53,7 @@ export async function MedResult({ med, profile }: { med: MedRow; profile: Profil
                 <h3 className="eyebrow mt-6 mb-3">{t.my.womenLikeYou}</h3>
                 <ul className="space-y-2.5">
                   {rows.map((row) => (
-                    <li key={row.text} className="flex gap-3 items-start"><StatusDot s={row.status} /><span className="leading-snug">{row.text}</span></li>
+                    <li key={row.text} className="flex gap-3 items-start"><StatusDot s={row.status} /><div><span className="leading-snug">{row.text}</span><Evidence e={row.evidence} label={t.summary.rule} /></div></li>
                   ))}
                 </ul>
                 <div className="mt-6 flex flex-wrap items-center gap-4">

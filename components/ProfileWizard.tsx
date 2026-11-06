@@ -5,6 +5,7 @@ import { supabaseBrowser } from "@/lib/supabase/client";
 import { useLang, useT } from "@/lib/i18n/client";
 import type { MedRow, ProfileRow } from "@/lib/supabase/server";
 import { MedicationPicker, type Med } from "./ProfileForm";
+import { COUNTRY_OPTIONS, countryName } from "@/lib/countries";
 
 const HORMONAL_BC = ["pill", "patch", "ring", "shot", "implant", "hormonal_iud"];
 const CONDITION_KEYS = ["heart", "high_bp", "diabetes", "thyroid", "kidney", "liver", "mental_health", "seizures", "cancer", "autoimmune", "pcos", "endometriosis", "migraine", "asthma", "osteoporosis"];
@@ -18,6 +19,7 @@ type Answers = {
   menopause_status: string; surgeries: string[];
   bc_type: string; menoHrt: boolean; genderHrt: boolean;
   condKeys: string[]; conditionsOther: string; allergies: string; smoking: string;
+  residence_country: string; birth_country: string; family_origins: string[];
   meds: Med[]; noMeds: boolean; consent: boolean;
 };
 
@@ -38,8 +40,18 @@ function initial(p: ProfileRow | null, meds: MedRow[], lang: string): Answers {
     bc_type: p?.birth_control_type ?? (p?.hormonal_contraception ? "pill" : "none"), menoHrt: p?.hormone_therapy ?? false, genderHrt: false,
     condKeys: conds.filter((c) => CONDITION_KEYS.includes(c)), conditionsOther: conds.filter((c) => !CONDITION_KEYS.includes(c)).join(", "),
     allergies: p?.allergies.join(", ") ?? "", smoking: p?.smoking ?? "never",
+    residence_country: p?.residence_country ?? "US", birth_country: p?.birth_country ?? "", family_origins: p?.family_origins ?? [],
     meds: meds.filter((m) => m.name !== "none"), noMeds: meds.some((m) => m.name === "none"), consent: !!p,
   };
+}
+
+function CountrySelect({ value, onChange, placeholder, id }: { value: string; onChange: (v: string) => void; placeholder: string; id: string }) {
+  return (
+    <select id={id} className="input" value={value} onChange={(e) => onChange(e.target.value)}>
+      <option value="">{placeholder}</option>
+      {COUNTRY_OPTIONS.map(([c, n]) => <option key={c} value={c}>{n}</option>)}
+    </select>
+  );
 }
 
 const num = (x: string) => { const n = parseFloat(x); return Number.isFinite(n) ? n : null; };
@@ -131,6 +143,27 @@ export function ProfileWizard({ userId, profile, meds, doneHref = "/my", preview
           </div>
         </div>
       ) },
+    { q: w.originQ, help: w.originHelp, optional: true,
+      body: (
+        <div className="space-y-5">
+          <label className="block" htmlFor="live"><span className="label">{w.liveIn}</span>
+            <CountrySelect id="live" value={a.residence_country} onChange={(v) => set("residence_country", v)} placeholder={w.pickCountry} /></label>
+          <label className="block" htmlFor="born"><span className="label">{w.bornIn}</span>
+            <CountrySelect id="born" value={a.birth_country} onChange={(v) => set("birth_country", v)} placeholder={w.pickCountry} /></label>
+          <div>
+            <span className="label">{w.familyFrom}</span>
+            <CountrySelect id="family" value="" onChange={(v) => v && !a.family_origins.includes(v) && set("family_origins", [...a.family_origins, v])} placeholder={w.pickCountry} />
+            {a.family_origins.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {a.family_origins.map((c) => (
+                  <button key={c} type="button" onClick={() => set("family_origins", a.family_origins.filter((x) => x !== c))}
+                    className="rounded-full border border-deep bg-deep text-paper px-4 py-1.5 text-sm" aria-label={`${pt.remove} ${countryName(c)}`}>{countryName(c)} ✕</button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      ) },
     { q: w.sexQ,
       body: (
         <div className="space-y-6">
@@ -216,6 +249,7 @@ export function ProfileWizard({ userId, profile, meds, doneHref = "/my", preview
               [pt.displayName, a.display_name], [pt.birthYear, a.birth_year],
               ["BMI", bmi ? String(bmi) : "—"],
               [pt.raceEth, [...a.race.map((r) => all.raceOptions[r]), a.hispanic === "yes" ? w.hispQ.replace(/[¿?]/g, "") : null].filter(Boolean).join(", ") || "—"],
+              [w.familyFrom, [a.birth_country, ...a.family_origins].filter(Boolean).map(countryName).filter((v, i, arr) => arr.indexOf(v) === i).join(", ") || "—"],
               [pt.conditions, [...a.condKeys.map((c) => w.conditionOptions[c]), a.conditionsOther].filter(Boolean).join(", ") || "—"],
               [pt.meds, a.noMeds ? pt.noMeds : a.meds.map((m) => m.name).join(", ")],
             ].map(([k, v]) => <div key={k} className="grid grid-cols-[9rem_1fr] gap-3 px-4 py-3"><dt className="text-muted">{k}</dt><dd>{v}</dd></div>)}
@@ -245,6 +279,7 @@ export function ProfileWizard({ userId, profile, meds, doneHref = "/my", preview
       hormone_therapy: a.menoHrt || a.genderHrt || a.meds.some((m) => m.kind === "hormone"),
       conditions: [...a.condKeys, ...list(a.conditionsOther)], allergies: list(a.allergies),
       kidney_or_liver_disease: a.condKeys.includes("kidney") || a.condKeys.includes("liver"), smoking: a.smoking,
+      residence_country: a.residence_country || null, birth_country: a.birth_country || null, family_origins: a.family_origins,
       consent_at: profile?.consent_at ?? new Date().toISOString(), updated_at: new Date().toISOString(),
     });
     if (error) { setBusy(false); return setErr(error.message); }

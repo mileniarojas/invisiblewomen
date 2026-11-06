@@ -85,7 +85,7 @@ async function fetchStudies(ingredient: string) {
 async function build(ingredient: string): Promise<DrugDetail> {
   const slug = slugify(ingredient);
   // Bump the version when parsing rules change so cached look-ups are rebuilt.
-  const file = path.join(CACHE_DIR, `${slug}.v2.json`);
+  const file = path.join(CACHE_DIR, `${slug}.v4.json`);
   try {
     const cached = JSON.parse(await readFile(file, "utf8"));
     if (Date.now() - cached.at < WEEK) return cached.drug;

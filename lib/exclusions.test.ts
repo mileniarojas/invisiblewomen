@@ -57,3 +57,8 @@ Exclusion Criteria:
 test("respiratory depression is not a mental health exclusion", () => {
   assert.deepEqual(flags(parseExclusions({ criteria: "Exclusion Criteria:\n- Severe respiratory depression\n- Use of CNS depressants" })), []);
 });
+
+test("a sub-heading is quoted with the rule under it", () => {
+  const e = parseExclusions({ criteria: "Exclusion Criteria:\n- Psychiatric Exclusions:\n- Current major depressive disorder" });
+  assert.equal(e.find((x) => x.flag === "mental_health_excluded")?.quote, "Psychiatric Exclusions: Current major depressive disorder");
+});

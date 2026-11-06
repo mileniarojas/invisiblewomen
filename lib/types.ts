@@ -41,6 +41,8 @@ export interface Trial {
   pct65: number | null;
   reports: { sex: boolean; race: boolean; ethnicity: boolean; bmi: boolean; pregnancy: boolean; menopause: boolean };
   sexStratified: boolean;
+  /** ISO country codes where the study had at least one site */
+  countries?: string[];
   exclusions: Exclusion[];
 }
 
@@ -57,6 +59,9 @@ export interface DrugSummary {
   exclusionPct: Partial<Record<ExclusionFlag, number>>;
   race: Record<string, number>;
   hispanic: { yes: number; no: number; unknown: number };
+  studiesWithLocations?: number;
+  countryStudies?: Record<string, number>;
+  regionStudies?: Record<string, number>;
 }
 
 export interface DrugIndexEntry {

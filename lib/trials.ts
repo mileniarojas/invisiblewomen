@@ -2,11 +2,12 @@
 import { parseExclusions, FLAG_LABELS, type ExclusionFlag } from "./exclusions.ts";
 import { drugNames } from "./aliases.ts";
 import type { DrugSummary, Trial } from "./types.ts";
+import { REGION_OF, codeForCountryName, type Region } from "./countries.ts";
 
 export const CTGOV_FIELDS = [
   "NCTId", "BriefTitle", "OfficialTitle", "Phase", "EnrollmentCount", "LeadSponsorName", "CompletionDate",
   "Condition", "InterventionName", "InterventionOtherName", "EligibilityModule",
-  "BaselineCharacteristicsModule", "OutcomeMeasuresModule",
+  "BaselineCharacteristicsModule", "OutcomeMeasuresModule", "LocationCountry",
 ].join(",");
 
 // Keep only studies whose interventions actually name the drug (the API search is fuzzy).
@@ -139,6 +140,7 @@ export function parseStudy(st: any): Trial {
     maxAge: elig.maximumAge ?? null,
     n, female, male, race, ethnicity, bmi, ageMean, pct65, reports,
     sexStratified: !!st.sexStratified,
+    countries: [...new Set((p.contactsLocationsModule?.locations ?? []).map((l: any) => codeForCountryName(l.country ?? "")).filter(Boolean) as string[])],
     exclusions: parseExclusions({ criteria: elig.eligibilityCriteria, sex: elig.sex, maximumAge: elig.maximumAge }),
   };
 }
@@ -179,6 +181,21 @@ export function summarize(trials: Trial[], loaded: boolean): DrugSummary {
     exclusionPct,
     race,
     hispanic,
+    ...locationSummary(trials),
   };
 }
 
+
+/** How many studies ran at least one site in each country / region. */
+function locationSummary(trials: Trial[]) {
+  const countryStudies: Record<string, number> = {};
+  const regionStudies: Partial<Record<Region, number>> = {};
+  let withLocations = 0;
+  for (const t of trials) {
+    const cs = t.countries ?? [];
+    if (cs.length) withLocations++;
+    for (const c of cs) countryStudies[c] = (countryStudies[c] ?? 0) + 1;
+    for (const r of new Set(cs.map((c) => REGION_OF[c]).filter(Boolean))) regionStudies[r] = (regionStudies[r] ?? 0) + 1;
+  }
+  return { studiesWithLocations: withLocations, countryStudies, regionStudies };
+}

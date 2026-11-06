@@ -117,8 +117,12 @@ export function parseExclusions(input: {
   const { inclusion, exclusion } = splitCriteria(input.criteria ?? "");
   for (const rule of RULES) {
     const lines = rule.section === "exclusion" ? exclusion : rule.section === "inclusion" ? inclusion : [...inclusion, ...exclusion];
-    const hit = lines.find((l) => rule.re.test(l) && !(rule.unless && rule.unless.test(l)));
-    if (hit) add(rule.flag, hit, rule.re);
+    const i = lines.findIndex((l) => rule.re.test(l) && !(rule.unless && rule.unless.test(l)));
+    if (i >= 0) {
+      // A short sub-heading like "Psychiatric Exclusions:" — quote it together with the rule beneath it.
+      const hit = /:\s*$/.test(lines[i]) && lines[i].length < 80 && lines[i + 1] ? `${lines[i]} ${lines[i + 1]}` : lines[i];
+      add(rule.flag, hit, rule.re);
+    }
   }
   return out;
 }

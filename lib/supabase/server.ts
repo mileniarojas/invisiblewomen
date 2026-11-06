@@ -48,6 +48,9 @@ export type ProfileRow = {
   birth_control_type: string;
   smoking: string;
   surgeries: string[];
+  residence_country: string | null;
+  birth_country: string | null;
+  family_origins: string[];
   consent_at: string;
 };
 export type MedRow = { id: string; rxcui: string | null; name: string; dose: string | null; kind: string };

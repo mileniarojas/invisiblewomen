@@ -288,6 +288,8 @@ export const en = {
     pacific: "Native Hawaiian or Pacific Islander", mena: "Middle Eastern or North African", other: "Another race", prefer_not: "Prefer not to say",
   } as Record<string, string>,
   wizard: {
+    originQ: "Where are you and your family from?", originHelp: "Optional. Medicines are often tested in only a few countries. This shows whether studies included people from places like yours.",
+    liveIn: "Country you live in", bornIn: "Country you were born in", familyFrom: "Where your parents or family come from", addCountry: "Add", pickCountry: "Choose a country…", sameAsLive: "Same as where I live",
     optional: "Optional",
     aboutQ: "First, a little about you",
     periodsQ: "Periods and menopause", surgeryQ: "Have you had either of these surgeries?",
@@ -334,6 +336,13 @@ export const en = {
     legend: { excluded: "Left out", limited: "Few or limited", included: "Included", unknown: "Not recorded" } as Record<string, string>,
   },
   personal: {
+    where: (kind: "live" | "born" | "family", country: string, n: number, total: number, region: string, regionN: number) => {
+      const who = kind === "live" ? `You live in ${country}` : kind === "born" ? `You were born in ${country}` : `Your family is from ${country}`;
+      if (n > 0) return `${who}: ${n} of ${total} studies with listed sites (${Math.round((n / total) * 100)}%) ran there.`;
+      return region
+        ? `${who}: none of its ${total} studies with listed sites ran there${regionN ? `, and ${regionN} ran anywhere in ${region}` : ` or anywhere in ${region}`}.`
+        : `${who}: none of its ${total} studies with listed sites ran there.`;
+    },
     conditionExcluded: (cond: string, p: number) => `You have ${cond}: ${p}% of studies turned away women with it.`,
     smoker: (p: number) => `You smoke: ${p}% of studies turned away smokers.`,
     mentalHealth: (p: number) => `You have a mental health condition: ${p}% of studies turned away women with some mental health conditions — check which ones in the full breakdown.`,
@@ -355,6 +364,22 @@ export const en = {
     kidney: (p: number) => `You have kidney or liver disease: ${p}% of studies turned away people with it.`,
     menopause: (p: number) => p === 0 ? "No study recorded whether women were past menopause." : `Only ${p}% of studies recorded whether women were past menopause.`,
     raceShort: { black: "Black", white: "White", asian: "Asian", american_indian: "American Indian or Alaska Native", pacific: "Native Hawaiian or Pacific Islander" } as Record<string, string>,
+  },
+  summary: {
+    title: "What matters most for you",
+    intro: "We went through the studies behind each of your medicines and pulled out what applies to you most.",
+    notConclusive: "Not conclusive. This sums up public study records — it can't tell you how a medicine will affect you, and missing data doesn't mean a medicine is unsafe. Talk to your doctor or pharmacist before changing anything.",
+    method: "Built automatically from ClinicalTrials.gov, FDA drug labels and FDA side-effect reports. Every line comes straight from those records — nothing is guessed or made up.",
+    topTitle: "Where women like you were left out or under-studied",
+    labelTitle: "What the FDA label says for someone like you",
+    signalTitle: "Side effects women reported more often",
+    gapTitle: "What nobody has checked yet",
+    none: "We didn't find any rules in these studies that left out women like you. That doesn't mean women like you were studied closely.",
+    signal: (med: string, effect: string, x: string) => `Women taking ${med} reported ${effect.toLowerCase()} about ${x}× as often as men.`,
+    noBySexAll: (n: number, total: number) => `For ${n} of your ${total} medicines, almost no study looked at how women did on their own.`,
+    ancestry: "Where a study ran doesn't tell us the participants' ancestry or genes — only where people could join.",
+    source: { studies: (k: number) => `From ${k} ClinicalTrials.gov studies`, label: "From the FDA drug label", reports: "From FDA side-effect reports (a warning sign, not proof)" } as Record<string, any>,
+    rule: "See the exact rule", loading: "Putting your summary together…",
   },
   savedPage: { title: "Saved medicines", none: "Nothing saved yet. Tap ☆ Save on any medicine page." },
   trial: {
