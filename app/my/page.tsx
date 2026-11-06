@@ -15,7 +15,7 @@ export async function generateMetadata() { return { title: (await getT()).t.my.t
 const SAMPLES: Record<string, { profile: ProfileLike & { display_name: string }; meds: MedRow[] }> = {
   "1": {
     profile: { display_name: "Maya", birth_year: new Date().getFullYear() - 34, sex_at_birth: "female", race_ethnicity: ["black"], height_cm: 165, weight_kg: 86,
-      pregnancy_status: "no", breastfeeding: false, menopause_status: "pre", hormonal_contraception: true, hormone_therapy: false, kidney_or_liver_disease: false, conditions: ["mental_health", "migraine"], smoking: "current", residence_country: "US", birth_country: "US", family_origins: ["JM"] },
+      pregnancy_status: "no", breastfeeding: false, menopause_status: "pre", hormonal_contraception: true, hormone_therapy: false, kidney_or_liver_disease: false, conditions: ["mental_health", "migraine"], smoking: "current", family_origins: ["JM"] },
     meds: [
       { id: "1", rxcui: null, name: "sertraline", dose: null, kind: "prescription" },
       { id: "2", rxcui: null, name: "zolpidem", dose: null, kind: "prescription" },
@@ -24,7 +24,7 @@ const SAMPLES: Record<string, { profile: ProfileLike & { display_name: string };
   },
   "2": {
     profile: { display_name: "Rosa", birth_year: new Date().getFullYear() - 68, sex_at_birth: "female", race_ethnicity: ["white", "hispanic"], height_cm: 158, weight_kg: 74,
-      pregnancy_status: "no", breastfeeding: false, menopause_status: "post", hormonal_contraception: false, hormone_therapy: true, kidney_or_liver_disease: true, conditions: ["heart", "diabetes", "kidney"], smoking: "former", residence_country: "US", birth_country: "BO", family_origins: ["BO"] },
+      pregnancy_status: "no", breastfeeding: false, menopause_status: "post", hormonal_contraception: false, hormone_therapy: true, kidney_or_liver_disease: true, conditions: ["heart", "diabetes", "kidney"], smoking: "former", family_origins: ["BO"] },
     meds: [
       { id: "1", rxcui: null, name: "atorvastatin", dose: null, kind: "prescription" },
       { id: "2", rxcui: null, name: "lisinopril", dose: null, kind: "prescription" },

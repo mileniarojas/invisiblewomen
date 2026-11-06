@@ -143,16 +143,11 @@ export function ProfileWizard({ userId, profile, meds, doneHref = "/my", preview
           </div>
         </div>
       ) },
-    { q: w.originQ, help: w.originHelp, optional: true,
+    { q: w.familyFrom, help: w.familyHelp, optional: true,
       body: (
         <div className="space-y-5">
-          <label className="block" htmlFor="live"><span className="label">{w.liveIn}</span>
-            <CountrySelect id="live" value={a.residence_country} onChange={(v) => set("residence_country", v)} placeholder={w.pickCountry} /></label>
-          <label className="block" htmlFor="born"><span className="label">{w.bornIn}</span>
-            <CountrySelect id="born" value={a.birth_country} onChange={(v) => set("birth_country", v)} placeholder={w.pickCountry} /></label>
           <div>
-            <span className="label">{w.familyFrom}</span>
-            <p className="text-sm text-muted mb-2">{w.familyHelp}</p>
+            <label className="sr-only" htmlFor="family">{w.familyFrom}</label>
             <CountrySelect id="family" value="" onChange={(v) => v && !a.family_origins.includes(v) && set("family_origins", [...a.family_origins, v])} placeholder={w.pickCountry} />
             {a.family_origins.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-3">
@@ -250,7 +245,7 @@ export function ProfileWizard({ userId, profile, meds, doneHref = "/my", preview
               [pt.displayName, a.display_name], [pt.birthYear, a.birth_year],
               ["BMI", bmi ? String(bmi) : "—"],
               [pt.raceEth, [...a.race.map((r) => all.raceOptions[r]), a.hispanic === "yes" ? w.hispQ.replace(/[¿?]/g, "") : null].filter(Boolean).join(", ") || "—"],
-              [w.familyFrom, [a.birth_country, ...a.family_origins].filter(Boolean).map(countryName).filter((v, i, arr) => arr.indexOf(v) === i).join(", ") || "—"],
+              [w.familyFrom, a.family_origins.map(countryName).join(", ") || "—"],
               [pt.conditions, [...a.condKeys.map((c) => w.conditionOptions[c]), a.conditionsOther].filter(Boolean).join(", ") || "—"],
               [pt.meds, a.noMeds ? pt.noMeds : a.meds.map((m) => m.name).join(", ")],
             ].map(([k, v]) => <div key={k} className="grid grid-cols-[9rem_1fr] gap-3 px-4 py-3"><dt className="text-muted">{k}</dt><dd>{v}</dd></div>)}
@@ -280,7 +275,7 @@ export function ProfileWizard({ userId, profile, meds, doneHref = "/my", preview
       hormone_therapy: a.menoHrt || a.genderHrt || a.meds.some((m) => m.kind === "hormone"),
       conditions: [...a.condKeys, ...list(a.conditionsOther)], allergies: list(a.allergies),
       kidney_or_liver_disease: a.condKeys.includes("kidney") || a.condKeys.includes("liver"), smoking: a.smoking,
-      residence_country: a.residence_country || null, birth_country: a.birth_country || null, family_origins: a.family_origins,
+      residence_country: null, birth_country: null, family_origins: a.family_origins,
       consent_at: profile?.consent_at ?? new Date().toISOString(), updated_at: new Date().toISOString(),
     });
     if (error) { setBusy(false); return setErr(error.message); }
