@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { getViewer } from "@/lib/supabase/server";
-import { getDrug } from "@/lib/data";
+import { loadDrug } from "@/lib/live";
 
 type Result = { ok: true } | { ok: false; error: string };
 
@@ -23,7 +23,7 @@ export async function postExperience(slug: string, form: FormData): Promise<Resu
   const g = await gate();
   if ("error" in g) return { ok: false, error: g.error! };
   const { v } = g;
-  if (!(await getDrug(slug))) return { ok: false, error: "unknown_drug" };
+  if (!/^[a-z0-9-]{2,80}$/.test(slug) || !(await loadDrug(slug).catch(() => null))) return { ok: false, error: "unknown_drug" };
   const body = String(form.get("body") ?? "").trim();
   if (body.length < 10) return { ok: false, error: "too_short" };
   const severity = Number(form.get("severity")) || null;

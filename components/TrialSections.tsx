@@ -4,6 +4,9 @@ import type { Dict } from "@/lib/i18n";
 import type { ExclusionFlag } from "@/lib/exclusions";
 import { Gap, fmt } from "./ui";
 
+/** Pre-built medicines have local study pages; live look-ups link straight to ClinicalTrials.gov. */
+const trialHref = (nct: string, live?: boolean) => (live ? `https://clinicaltrials.gov/study/${nct}` : `/trials/${nct}`);
+
 const pctOf = (a: number, b: number) => (b ? Math.round((a / b) * 1000) / 10 : 0);
 
 export function SexSplit({ female, male, t }: { female: number; male: number; t: Dict }) {
@@ -96,7 +99,7 @@ export function ExclusionList({ drug, t }: { drug: DrugDetail; t: Dict }) {
               {ex && (
                 <details className="mt-2 text-sm">
                   <summary className="cursor-pointer text-muted hover:text-ink">{t.seeRule}</summary>
-                  <blockquote lang="en" className="mt-2 italic border-l-2 border-rose-soft pl-3">“{ex.q}” <Link href={`/trials/${ex.tr.nct}`} className="not-italic underline">{ex.tr.nct}</Link></blockquote>
+                  <blockquote lang="en" className="mt-2 italic border-l-2 border-rose-soft pl-3">“{ex.q}” <Link href={trialHref(ex.tr.nct, drug.live)} className="not-italic underline">{ex.tr.nct}</Link></blockquote>
                 </details>
               )}
             </div>
@@ -124,7 +127,7 @@ export function MissingDataChecklist({ drug, t }: { drug: DrugDetail; t: Dict })
 
 const phase = (x: Trial) => x.phases.map((p) => p.replace("PHASE", "").replace("EARLY_1", "Early 1").replace("NA", "—")).join("/") || "—";
 
-export function TrialTable({ trials, t }: { trials: Trial[]; t: Dict }) {
+export function TrialTable({ trials, t, live }: { trials: Trial[]; t: Dict; live?: boolean }) {
   return (
     <div className="card overflow-x-auto">
       <p className="text-xs text-muted p-3 border-b border-line">{t.drug.englishOnly}</p>
@@ -144,7 +147,7 @@ export function TrialTable({ trials, t }: { trials: Trial[]; t: Dict }) {
             return (
               <tr key={x.nct} className="align-top">
                 <td className="p-3 min-w-[16rem]" lang="en">
-                  <Link href={`/trials/${x.nct}`} className="font-medium hover:text-rose">{x.title}</Link>
+                  <Link href={trialHref(x.nct, live)} className="font-medium hover:text-rose">{x.title}</Link>
                   <div className="text-xs text-muted">{x.nct}</div>
                 </td>
                 <td className="p-3 whitespace-nowrap">{phase(x)}</td>

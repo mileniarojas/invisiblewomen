@@ -140,7 +140,7 @@ export default async function DrugPage({ params }: { params: Promise<{ slug: str
           <Detail title={t.drug.who}><WhoWasInTrials drug={drug} t={t} /></Detail>
           <Detail title={t.drug.leftOut}><p className="text-sm text-muted mb-4">{t.drug.leftOutIntro}</p><ExclusionList drug={drug} t={t} /></Detail>
           <Detail title={t.drug.missing}><p className="text-sm text-muted mb-4">{t.drug.missingIntro}</p><MissingDataChecklist drug={drug} t={t} /></Detail>
-          <Detail title={t.drug.allTrials(s.trials)}><TrialTable trials={drug.trialList} t={t} /></Detail>
+          <Detail title={t.drug.allTrials(s.trials)}><TrialTable trials={drug.trialList} t={t} live={drug.live} /></Detail>
         </div>
       </section>
     </article>

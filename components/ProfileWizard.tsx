@@ -248,9 +248,8 @@ export function ProfileWizard({ userId, profile, meds, doneHref = "/my", preview
       consent_at: profile?.consent_at ?? new Date().toISOString(), updated_at: new Date().toISOString(),
     });
     if (error) { setBusy(false); return setErr(error.message); }
-    await sb.from("profile_medications").delete().eq("user_id", userId);
-    const rows = (a.noMeds ? [{ rxcui: null, name: "none", dose: null, kind: "otc" }] : a.meds).map((m) => ({ ...m, user_id: userId }));
-    const { error: e2 } = await sb.from("profile_medications").insert(rows);
+    const medList = a.noMeds ? [{ rxcui: null, name: "none", dose: null, kind: "otc" }] : a.meds;
+    const { error: e2 } = await sb.rpc("replace_my_medications", { meds: medList });
     setBusy(false);
     if (e2) return setErr(e2.message);
     router.push(doneHref);

@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { getViewer } from "@/lib/supabase/server";
-import { getDrug } from "@/lib/data";
+import { loadDrug } from "@/lib/live";
 import { checkInteractions } from "@/lib/interactions";
 
 export async function POST(req: Request) {
   const { slug } = await req.json().catch(() => ({}));
-  const drug = typeof slug === "string" ? await getDrug(slug) : null;
+  const drug = typeof slug === "string" && /^[a-z0-9-]{2,80}$/.test(slug) ? await loadDrug(slug).catch(() => null) : null;
   if (!drug) return NextResponse.json({ error: "unknown_drug" }, { status: 404 });
   const v = await getViewer();
   if (!v.user) return NextResponse.json({ error: "sign_in" }, { status: 401 });

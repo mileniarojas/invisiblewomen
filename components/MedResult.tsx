@@ -22,12 +22,14 @@ export async function MedResult({ med, profile }: { med: MedRow; profile: Profil
   const { t, lang } = await getT();
   const ingredients = await ingredientsFor(med.name, med.rxcui);
   if (!ingredients.length) return <div className="rounded-2xl border border-line bg-card p-6"><p className="font-serif text-2xl capitalize">{med.name}</p><p className="text-muted mt-2">{t.my.unknownMed}</p></div>;
-  const drugs = await Promise.all(ingredients.map(async (ing) => ({ ing, drug: await loadDrug(ing).catch(() => null) })));
+  const drugs = await Promise.all(ingredients.map(async (ing) => {
+    try { return { ing, drug: await loadDrug(ing), failed: false }; } catch { return { ing, drug: null, failed: true }; }
+  }));
   const brand = ingredients.length > 1 || ingredients[0] !== med.name.toLowerCase() ? med.name : null;
 
   return (
     <>
-      {drugs.map(({ ing, drug }) => {
+      {drugs.map(({ ing, drug, failed }) => {
         const name = drug ? drugName(drug.slug, drug.name, lang) : ing;
         const info = drug ? featuredInfo(drug.slug, lang) : undefined;
         const rows = drug && drug.summary.trials > 0 ? personalRows(profile, drug, t) : [];
@@ -38,7 +40,7 @@ export async function MedResult({ med, profile }: { med: MedRow; profile: Profil
               {brand && <span className="text-muted capitalize">{t.my.from(brand)}</span>}
             </header>
             {info && <p className="mt-1">{info.use}</p>}
-            {!drug ? <p className="text-muted mt-4">{t.my.unknownMed}</p> : drug.summary.trials === 0 ? <p className="text-muted mt-4">{t.my.noStudies}</p> : (
+            {!drug ? <p className="text-muted mt-4">{failed ? t.my.lookupFailed : t.my.unknownMed}</p> : drug.summary.trials === 0 ? <p className="text-muted mt-4">{t.my.noStudies}</p> : (
               <>
                 <div className="mt-5 rounded-lg bg-rose-soft/60 px-4 py-3 max-w-md">
                   <div className="flex items-baseline gap-2">

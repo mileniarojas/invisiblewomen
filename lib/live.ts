@@ -73,7 +73,7 @@ async function fetchStudies(ingredient: string) {
     u.searchParams.set("pageSize", "100");
     if (token) u.searchParams.set("pageToken", token);
     const res = await fetch(u, { cache: "no-store" });
-    if (!res.ok) break;
+    if (!res.ok) throw new Error(`ClinicalTrials.gov returned ${res.status}`);
     const j = await res.json();
     studies.push(...(j.studies ?? []));
     token = j.nextPageToken;

@@ -330,6 +330,7 @@ export const es: Dict = {
     womenLikeYou: "Mujeres como usted en sus estudios", full: "Ver todos los detalles", noStudies: "No encontramos estudios terminados con resultados publicados para este medicamento, así que no hay datos públicos sobre en quién se probó.",
     unknownMed: "No pudimos reconocer este medicamento. Intente editarlo en su perfil.",
     live: "Buscado en vivo en ClinicalTrials.gov",
+    lookupFailed: "We couldn't reach ClinicalTrials.gov just now. Please refresh in a minute.",
     preview: "Vista previa con un perfil de ejemplo (solo en desarrollo; no requiere cuenta).",
     legend: { excluded: "Excluidas", limited: "Pocas o limitadas", included: "Incluidas", unknown: "No anotado" },
   },

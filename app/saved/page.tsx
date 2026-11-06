@@ -12,7 +12,7 @@ export default async function Saved() {
   if (!v.user || !v.sb) redirect("/login");
   const { data } = await v.sb.from("saves").select("drug_slug,created_at").eq("user_id", v.user.id).order("created_at", { ascending: false });
   const index = new Map((await getDrugIndex()).map((d) => [d.slug, d]));
-  const drugs = (data ?? []).map((s) => index.get(s.drug_slug)).filter((d) => !!d);
+  const drugs = (data ?? []).map((s) => index.get(s.drug_slug) ?? { slug: s.drug_slug, name: s.drug_slug.replace(/-/g, " "), pctFemale: null });
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <h1 className="font-serif text-4xl mb-6">{t.savedPage.title}</h1>
@@ -20,7 +20,7 @@ export default async function Saved() {
         <ul className="grid gap-2">{drugs.map((d) => (
           <li key={d.slug}><Link href={`/drugs/${d.slug}`} className="card p-4 flex gap-3 items-center hover:border-rose">
             <b className="capitalize flex-1 font-serif text-lg">{drugName(d.slug, d.name, lang)}</b>
-            <span className="text-sm text-rose">{t.home.womenInTrials(d.pctFemale ?? 0)}</span>
+            {d.pctFemale !== null && <span className="text-sm text-rose">{t.home.womenInTrials(d.pctFemale)}</span>}
           </Link></li>
         ))}</ul>
       )}

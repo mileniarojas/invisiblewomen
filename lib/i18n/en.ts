@@ -329,6 +329,7 @@ export const en = {
     womenLikeYou: "Women like you in its studies", full: "See the full breakdown", noStudies: "We found no finished studies with posted results for this medicine — so there's no public study data on who it was tested on.",
     unknownMed: "We couldn't match this to a medicine name. Try editing it in your profile.",
     live: "Looked up live from ClinicalTrials.gov",
+    lookupFailed: "We couldn't reach ClinicalTrials.gov just now. Please refresh in a minute.",
     preview: "Preview with a sample profile (development only — no account needed).",
     legend: { excluded: "Left out", limited: "Few or limited", included: "Included", unknown: "Not recorded" } as Record<string, string>,
   },
