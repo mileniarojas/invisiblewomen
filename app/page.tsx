@@ -26,6 +26,7 @@ export default async function Home() {
             <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-deep">
               {h.h1a} <span className="underline decoration-rose decoration-4 underline-offset-[10px]">{h.h1b}</span>
             </h1>
+            <p className="mt-8 text-lg sm:text-xl leading-relaxed max-w-xl">{h.lead}</p>
             <div className="mt-10 flex flex-col items-start gap-3">
               <a href="#medicines" className="btn btn-primary btn-lg">{h.cta}</a>
               <p className="text-sm text-muted">{h.sub}</p>
