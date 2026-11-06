@@ -152,6 +152,7 @@ export function ProfileWizard({ userId, profile, meds, doneHref = "/my", preview
             <CountrySelect id="born" value={a.birth_country} onChange={(v) => set("birth_country", v)} placeholder={w.pickCountry} /></label>
           <div>
             <span className="label">{w.familyFrom}</span>
+            <p className="text-sm text-muted mb-2">{w.familyHelp}</p>
             <CountrySelect id="family" value="" onChange={(v) => v && !a.family_origins.includes(v) && set("family_origins", [...a.family_origins, v])} placeholder={w.pickCountry} />
             {a.family_origins.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-3">

@@ -289,8 +289,8 @@ export const es: Dict = {
     pacific: "Nativa de Hawái o islas del Pacífico", mena: "De Medio Oriente o Norte de África", other: "Otra raza", prefer_not: "Prefiero no decir",
   },
   wizard: {
-    originQ: "Where are you and your family from?", originHelp: "Optional. Medicines are often tested in only a few countries. This shows whether studies included people from places like yours.",
-    liveIn: "Country you live in", bornIn: "Country you were born in", familyFrom: "Where your parents or family come from", addCountry: "Add", pickCountry: "Choose a country…", sameAsLive: "Same as where I live",
+    originQ: "Where are you from?", originHelp: "Optional. Medicines are often tested in only a few countries. This shows whether studies included people from places like yours.",
+    liveIn: "Country you live in", bornIn: "Country you were born in", familyFrom: "What is your heritage?", familyHelp: "What you identify with. Choose as many countries as you like.", addCountry: "Add", pickCountry: "Choose a country…", sameAsLive: "Same as where I live",
     optional: "Optional",
     aboutQ: "First, a little about you",
     periodsQ: "Periods and menopause", surgeryQ: "Have you had either of these surgeries?",
@@ -338,7 +338,7 @@ export const es: Dict = {
   },
   personal: {
     where: (kind: "live" | "born" | "family", country: string, n: number, total: number, region: string, regionN: number) => {
-      const who = kind === "live" ? `You live in ${country}` : kind === "born" ? `You were born in ${country}` : `Your family is from ${country}`;
+      const who = kind === "live" ? `You live in ${country}` : kind === "born" ? `You were born in ${country}` : `Your heritage includes ${country}`;
       if (n > 0) return `${who}: ${n} of ${total} studies with listed sites (${Math.round((n / total) * 100)}%) ran there.`;
       return region
         ? `${who}: none of its ${total} studies with listed sites ran there${regionN ? `, and ${regionN} ran anywhere in ${region}` : ` or anywhere in ${region}`}.`
