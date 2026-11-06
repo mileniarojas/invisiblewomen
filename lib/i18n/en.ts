@@ -6,12 +6,12 @@ export const en = {
   langName: "English",
   switchTo: "Español",
   bar: "Women were less than half of the people tested for almost all of these common medicines.",
-  nav: { how: "How it works", drugsShort: "Drugs", drugs: "Drug experience", pregnancy: "Pregnancy", community: "Community forum", methods: "Sources", saved: "Saved", join: "Get your results", finishProfile: "Finish profile" },
+  nav: { how: "How it works", drugsShort: "Drugs", drugs: "Common drugs", pregnancy: "Pregnancy", community: "Community forum", methods: "How we did this", saved: "Saved", join: "Get your results", finishProfile: "Finish profile" },
   footer: {
-    disclaimer: "invisiblewomen shares published research and FDA information in plain words. It is not medical advice, and it is not affiliated with or endorsed by Stanford University.",
-    methods: "Sources", sources: "Sources", privacy: "Privacy",
+    disclaimer: "InvisibleWoman is for learning, not medical advice. Never start, stop or change a medicine without talking to your doctor or pharmacist. Side-effect data: FDA reports analyzed by Chandak & Tatonetti (2020). Trial data: ClinicalTrials.gov. Drug-label facts: U.S. FDA.",
+    methods: "How we did this", sources: "Sources", privacy: "Privacy",
   },
-  meta: { title: "invisiblewomen: your medicine was tested. Were you?", description: "Most medicines were studied mostly on men. See what is known for women, and pregnant women, and add what you notice." },
+  meta: { title: "InvisibleWoman — medicines tested without women", description: "Were women included when these medicines were tested? See who was in the studies, who was left out, and what nobody checked." },
 
   home: {
     topEyebrow: "Community-based observational clinical trials, run by Stanford PhD scientists",
