@@ -33,7 +33,7 @@ export const en = {
     howTitle: "How it works",
     howBrowse: "Or browse common medicines",
     steps: [
-      ["Make it about you", "Create a free, private profile and answer a few quick questions: age, height and weight, race, pregnancy and hormones."],
+      ["Make it about you", "Create a personalized account tailored to your body, health and stage of life."],
       ["Pick your medicine", "Add the medicines you take, or choose one of the common medicines women take."],
       ["See the stats", "See how many women were in its studies, who was left out, and whether women like you were included."],
     ] as [string, string][],
